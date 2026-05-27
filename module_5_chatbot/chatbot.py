@@ -29,8 +29,7 @@ import sys
 
 # ── Groq client ───────────────────────────────────────────────────────────────
 
-# Store key in env var for production; hard-coded here for local FYP testing.
-_API_KEY = os.getenv("GROQ_API_KEY", "REMOVED_SEE_BACKEND_ENV")
+_API_KEY = os.getenv("GROQ_API_KEY")
 MODEL    = "llama-3.3-70b-versatile"   # Groq's most capable model (fast inference)
 
 _client = None
