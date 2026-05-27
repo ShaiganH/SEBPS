@@ -1,12 +1,18 @@
 import axios from 'axios'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-// ── Change this to your backend's LAN IP when testing on a real device ───────
-// Android emulator:  http://10.0.2.2:8000
-// iOS simulator:     http://localhost:8000
-// Physical device:   http://<your-machine-LAN-IP>:8000
-export const API_BASE = 'http://192.168.1.52:8000/api/v1'
-export const WS_BASE  = 'ws://192.168.1.52:8000'
+// ── Backend URL resolution (priority order) ───────────────────────────────────
+// 1. EXPO_PUBLIC_API_URL  — set automatically by Docker Compose via HOST_IP in root .env
+// 2. Hardcoded LAN IP     — fallback for plain local dev without Docker
+//
+// To override without Docker, create mobile/.env:
+//   EXPO_PUBLIC_API_URL=http://<your-LAN-IP>:8000/api/v1
+//   EXPO_PUBLIC_WS_URL=ws://<your-LAN-IP>:8000
+const _api = process.env.EXPO_PUBLIC_API_URL || 'http://192.168.1.52:8000/api/v1'
+const _ws  = process.env.EXPO_PUBLIC_WS_URL  || 'ws://192.168.1.52:8000'
+
+export const API_BASE = _api
+export const WS_BASE  = _ws
 
 const api = axios.create({ baseURL: API_BASE })
 
