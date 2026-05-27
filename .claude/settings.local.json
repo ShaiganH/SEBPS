@@ -6,7 +6,10 @@
       "Bash(python3)",
       "Bash(docker compose *)",
       "Bash(docker exec backend-api-1 python -W ignore -c ' *)",
-      "Bash(python -c ' *)"
+      "Bash(python -c ' *)",
+      "Bash(docker exec backend-db-1 psql -U sebps -d sebps_db -c ' *)",
+      "Bash(docker restart *)",
+      "Bash(docker exec *)"
     ]
   }
 }

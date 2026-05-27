@@ -142,6 +142,14 @@ CELERY_BEAT_SCHEDULE = {
         "task": "tasks.cycle_tasks.billing_cycle_rollover",
         "schedule": crontab(hour=0, minute=5),  # 00:05 every day, tz=CELERY_TIMEZONE
     },
+    # Every 30 s — detect and revive IoT simulator chains that died after a
+    # worker restart or crash (chain is dead when is_running=True but no
+    # recent readings exist).  Seeds session_energy from the last known
+    # reading so the LAG-delta kWh calculation stays monotonically correct.
+    "revive-dead-simulators": {
+        "task": "tasks.iot_tasks.revive_dead_simulators",
+        "schedule": 30.0,  # seconds
+    },
 }
 
 # ── Auth ──────────────────────────────────────────────────────────────────────

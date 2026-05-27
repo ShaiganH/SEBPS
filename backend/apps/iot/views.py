@@ -234,12 +234,22 @@ class SimulatorView(APIView):
                 },
             )
             from tasks.iot_tasks import run_iot_simulator
+
+            # Seed the cumulative energy counter from the device's last reading so
+            # the energy value is monotonically increasing across restarts — exactly
+            # like a real energy meter that never resets to zero.  Without this,
+            # Max(energy) − Min(energy) gets stuck at the old session's peak and
+            # the "consumed this cycle" figure freezes until the new session
+            # surpasses the previous maximum.
+            last_reading = IoTReading.objects.filter(device=device).order_by("-time").first()
+            initial_energy = float(last_reading.energy) if last_reading else 0.0
+
             # started_at_ts acts as session token — stale chains detect mismatch and stop
             task = run_iot_simulator.apply_async(
                 kwargs={
                     "device_pk":     device.pk,
                     "started_at_ts": started_at.isoformat(),
-                    "session_energy": 0.0,
+                    "session_energy": initial_energy,
                     "reading_count":  0,
                 },
             )

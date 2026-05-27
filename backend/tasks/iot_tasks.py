@@ -143,3 +143,54 @@ def run_iot_simulator(
         },
         countdown=interval_s,
     )
+
+
+@shared_task(name="tasks.iot_tasks.revive_dead_simulators", ignore_result=True)
+def revive_dead_simulators():
+    """
+    Celery Beat watchdog — runs every 30 s.
+
+    Finds every IoTSimulator with is_running=True whose last reading is older
+    than 3× its configured interval (meaning the self-rescheduling chain has
+    died, e.g. after a worker restart that killed the in-flight task before
+    apply_async() was called).
+
+    Revives the chain by seeding session_energy from the last known reading so
+    energy values are monotonically increasing — the LAG-delta query in
+    _get_iot_context then counts the resumed increments correctly.
+    """
+    from datetime import timedelta
+
+    from django.utils import timezone
+
+    from apps.iot.models import IoTReading, IoTSimulator
+
+    now = timezone.now()
+
+    for sim in IoTSimulator.objects.filter(is_running=True).select_related("device"):
+        if not sim.started_at:
+            continue  # simulator was never properly started — skip
+
+        device    = sim.device
+        gap_limit = timedelta(seconds=max(sim.interval_seconds * 3, 30))
+
+        last = IoTReading.objects.filter(device=device).order_by("-time").first()
+
+        if last is not None and last.time >= now - gap_limit:
+            continue  # chain is alive and well
+
+        # Chain is dead (or device never had a reading) — revive it.
+        seed_energy = float(last.energy) if last else 0.0
+        logger.info(
+            "[Watchdog] Dead chain detected for '%s' "
+            "(last reading: %s). Reviving at energy=%.4f kWh.",
+            device.device_id,
+            last.time if last else "never",
+            seed_energy,
+        )
+        run_iot_simulator.apply_async(kwargs={
+            "device_pk":      device.pk,
+            "started_at_ts":  sim.started_at.isoformat(),
+            "session_energy": seed_energy,
+            "reading_count":  0,
+        })

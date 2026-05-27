@@ -75,28 +75,54 @@ def _get_iot_context(user):
     ctx["device_id"] = device.device_id
 
     # ── 1. Actual consumed this billing cycle (for display + current bill) ────
-    # Max − Min since billing_start avoids cumulative-counter artefacts.
-    cycle_agg = IoTReading.objects.filter(
-        device=device, time__gte=billing_start
-    ).aggregate(
-        max_e=Max("energy"),
-        min_e=Min("energy"),
-        first_time=Min("time"),
-        last_time=Max("time"),
-    )
+    # Sum positive LAG-deltas instead of a single Max−Min.
+    #
+    # Why: the simulator's `energy` field is a *per-session* cumulative counter.
+    # After a restart it resets to 0 (or to the last reading's value once the
+    # iot/views.py seed fix is active).  A simple Max−Min across the whole
+    # billing cycle freezes at the old session's peak until the new session
+    # exceeds it.  Instead we compute:
+    #
+    #   ∑ max(energy[i] − energy[i−1], 0)   for all readings ordered by time
+    #
+    # Negative deltas (session resets) are clamped to 0, so they contribute
+    # nothing.  Positive deltas accumulate correctly across any number of
+    # restarts.  Once the seed fix is live (all sessions monotonically
+    # increasing) every delta is positive anyway.
+    from django.db import connection
 
-    if cycle_agg["max_e"] is None:
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT
+                COALESCE(SUM(GREATEST(delta, 0.0)), 0.0) AS measured_kwh,
+                MIN(t)   AS first_time,
+                MAX(t)   AS last_time,
+                COUNT(*) AS cnt
+            FROM (
+                SELECT time AS t,
+                       energy - LAG(energy) OVER (ORDER BY time) AS delta
+                FROM   iot_readings
+                WHERE  device_id = %s
+                  AND  time >= %s
+            ) sub
+        """, [device.pk, billing_start])
+        row = cursor.fetchone()
+
+    if row is None or row[3] == 0:
         return ctx  # no readings yet
 
-    ctx["has_iot"] = True
-    ctx["last_reading_at"] = cycle_agg["last_time"]
-    measured_kwh = max(0.0, (cycle_agg["max_e"] or 0.0) - (cycle_agg["min_e"] or 0.0))
-    ctx["measured_kwh"] = round(measured_kwh, 4)
+    measured_kwh = float(row[0] or 0.0)
+    first_time   = row[1]
+    last_time    = row[2]
+
+    ctx["has_iot"]         = True
+    ctx["last_reading_at"] = last_time
+    ctx["measured_kwh"]    = round(measured_kwh, 4)
 
     # Total runtime since billing start (used only for display in the banner)
-    if cycle_agg["first_time"] and cycle_agg["last_time"]:
+    if first_time and last_time:
         total_runtime = max(
-            (cycle_agg["last_time"] - cycle_agg["first_time"]).total_seconds() / 3600,
+            (last_time - first_time).total_seconds() / 3600,
             1 / 60,
         )
         ctx["iot_runtime_hours"] = round(total_runtime, 3)

@@ -205,3 +205,5 @@ WARNING 2026-05-27 14:30:16,924 pid=31 middleware:34  GET /api/v1/notifications/
 WARNING 2026-05-27 14:30:16,928 pid=31 django.request:241  Unauthorized: /api/v1/notifications/unread/
 WARNING 2026-05-27 15:30:21,099 pid=31 middleware:34  GET /api/v1/notifications/unread/ → 401 (8.4ms) user=- size=183B
 WARNING 2026-05-27 15:30:21,105 pid=31 django.request:241  Unauthorized: /api/v1/notifications/unread/
+WARNING 2026-05-27 16:30:22,761 pid=31 middleware:34  GET /api/v1/predictions/iot-status/ → 401 (4.7ms) user=- size=183B
+WARNING 2026-05-27 16:30:22,765 pid=31 django.request:241  Unauthorized: /api/v1/predictions/iot-status/
