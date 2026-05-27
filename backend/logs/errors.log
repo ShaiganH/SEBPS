@@ -1,0 +1,207 @@
+WARNING 2026-05-26 22:32:34,609 pid=1031 middleware:34  POST /api/v1/auth/register/ → 400 (2.2ms) user=- size=96B
+WARNING 2026-05-26 22:32:34,610 pid=1031 django.request:241  Bad Request: /api/v1/auth/register/
+WARNING 2026-05-26 22:32:34,756 pid=1031 middleware:34  POST /api/v1/auth/register/ → 400 (1.5ms) user=- size=116B
+WARNING 2026-05-26 22:32:34,757 pid=1031 django.request:241  Bad Request: /api/v1/auth/register/
+WARNING 2026-05-26 22:32:34,760 pid=1031 middleware:34  POST /api/v1/auth/register/ → 400 (1.7ms) user=- size=138B
+WARNING 2026-05-26 22:32:34,760 pid=1031 django.request:241  Bad Request: /api/v1/auth/register/
+WARNING 2026-05-26 22:32:34,763 pid=1031 middleware:34  POST /api/v1/auth/register/ → 400 (1.1ms) user=- size=90B
+WARNING 2026-05-26 22:32:34,764 pid=1031 django.request:241  Bad Request: /api/v1/auth/register/
+WARNING 2026-05-26 22:32:35,680 pid=1031 middleware:34  POST /api/v1/auth/login/ → 401 (164.6ms) user=- size=63B
+WARNING 2026-05-26 22:32:35,680 pid=1031 django.request:241  Unauthorized: /api/v1/auth/login/
+WARNING 2026-05-26 22:32:35,829 pid=1031 middleware:34  POST /api/v1/auth/login/ → 401 (145.4ms) user=- size=63B
+WARNING 2026-05-26 22:32:35,829 pid=1031 django.request:241  Unauthorized: /api/v1/auth/login/
+WARNING 2026-05-26 22:32:35,975 pid=1031 middleware:34  POST /api/v1/auth/login/ → 400 (0.4ms) user=- size=96B
+WARNING 2026-05-26 22:32:35,975 pid=1031 django.request:241  Bad Request: /api/v1/auth/login/
+WARNING 2026-05-26 22:32:35,977 pid=1031 middleware:34  GET /api/v1/auth/me/ → 401 (0.4ms) user=- size=58B
+WARNING 2026-05-26 22:32:35,978 pid=1031 django.request:241  Unauthorized: /api/v1/auth/me/
+WARNING 2026-05-26 22:32:37,579 pid=1031 middleware:34  POST /api/v1/auth/change-password/ → 400 (141.1ms) user=16 size=38B
+WARNING 2026-05-26 22:32:37,580 pid=1031 django.request:241  Bad Request: /api/v1/auth/change-password/
+WARNING 2026-05-26 22:32:37,724 pid=1031 middleware:34  POST /api/v1/auth/change-password/ → 400 (0.4ms) user=17 size=104B
+WARNING 2026-05-26 22:32:37,725 pid=1031 django.request:241  Bad Request: /api/v1/auth/change-password/
+WARNING 2026-05-26 22:32:38,017 pid=1031 middleware:34  POST /api/v1/auth/logout/ → 401 (0.2ms) user=- size=58B
+WARNING 2026-05-26 22:32:38,017 pid=1031 django.request:241  Unauthorized: /api/v1/auth/logout/
+WARNING 2026-05-26 22:32:38,212 pid=1031 apps.accounts.views:54  Logout failed (bad/missing refresh token): Token is invalid or expired
+WARNING 2026-05-26 22:32:38,212 pid=1031 middleware:34  POST /api/v1/auth/logout/ → 400 (0.7ms) user=19 size=27B
+WARNING 2026-05-26 22:32:38,213 pid=1031 django.request:241  Bad Request: /api/v1/auth/logout/
+WARNING 2026-05-26 22:32:38,363 pid=1031 apps.accounts.views:54  Logout failed (bad/missing refresh token): 'refresh'
+WARNING 2026-05-26 22:32:38,363 pid=1031 middleware:34  POST /api/v1/auth/logout/ → 400 (0.6ms) user=20 size=27B
+WARNING 2026-05-26 22:32:38,364 pid=1031 django.request:241  Bad Request: /api/v1/auth/logout/
+WARNING 2026-05-26 22:32:38,801 pid=1031 middleware:34  GET /api/v1/appliances/ → 401 (0.4ms) user=- size=58B
+WARNING 2026-05-26 22:32:38,801 pid=1031 django.request:241  Unauthorized: /api/v1/appliances/
+WARNING 2026-05-26 22:32:38,803 pid=1031 middleware:34  POST /api/v1/appliances/analyze/ → 401 (0.3ms) user=- size=58B
+WARNING 2026-05-26 22:32:38,803 pid=1031 django.request:241  Unauthorized: /api/v1/appliances/analyze/
+WARNING 2026-05-26 22:32:40,296 pid=1031 middleware:34  GET /api/v1/appliances/15/ → 404 (0.9ms) user=32 size=54B
+WARNING 2026-05-26 22:32:40,297 pid=1031 django.request:241  Not Found: /api/v1/appliances/15/
+WARNING 2026-05-26 22:32:40,300 pid=1031 middleware:34  GET /api/v1/appliances/catalog/ → 401 (0.2ms) user=- size=58B
+WARNING 2026-05-26 22:32:40,300 pid=1031 django.request:241  Unauthorized: /api/v1/appliances/catalog/
+WARNING 2026-05-26 22:32:41,219 pid=1031 middleware:34  POST /api/v1/appliances/optimize/ → 400 (1.0ms) user=39 size=96B
+WARNING 2026-05-26 22:32:41,219 pid=1031 django.request:241  Bad Request: /api/v1/appliances/optimize/
+WARNING 2026-05-26 22:32:41,379 pid=1031 middleware:34  POST /api/v1/appliances/optimize/ → 400 (1.2ms) user=40 size=96B
+WARNING 2026-05-26 22:32:41,380 pid=1031 django.request:241  Bad Request: /api/v1/appliances/optimize/
+WARNING 2026-05-26 22:32:41,384 pid=1031 middleware:34  GET /api/v1/budget/ → 401 (0.3ms) user=- size=58B
+WARNING 2026-05-26 22:32:41,385 pid=1031 django.request:241  Unauthorized: /api/v1/budget/
+WARNING 2026-05-26 22:32:41,530 pid=1031 middleware:34  GET /api/v1/budget/ → 404 (0.7ms) user=41 size=34B
+WARNING 2026-05-26 22:32:41,530 pid=1031 django.request:241  Not Found: /api/v1/budget/
+ERROR 2026-05-26 22:32:43,660 pid=1031 tasks.cycle_tasks:263  User 55: LESCO fetch trigger failed: Aggregate functions are not allowed in this query (celery_task_id=<MagicMock name='delay().id.resolve_expression().resolve_expression()' id='281472783877328'>).. Falling back to direct predict.
+ERROR 2026-05-26 22:32:44,038 pid=1031 tasks.cycle_tasks:263  User 57: LESCO fetch trigger failed: fetch boom. Falling back to direct predict.
+WARNING 2026-05-26 22:32:44,190 pid=1031 tasks.cycle_tasks:120  User 58: IoT query failed in rollover: DB gone
+ERROR 2026-05-26 22:32:44,195 pid=1031 tasks.cycle_tasks:263  User 58: LESCO fetch trigger failed: Aggregate functions are not allowed in this query (celery_task_id=<MagicMock name='delay().id.resolve_expression().resolve_expression()' id='281472763285584'>).. Falling back to direct predict.
+WARNING 2026-05-26 22:32:48,073 pid=1031 middleware:34  GET /api/v1/predictions/context/ → 404 (12.3ms) user=- size=179B
+WARNING 2026-05-26 22:32:48,075 pid=1031 django.request:241  Not Found: /api/v1/predictions/context/
+WARNING 2026-05-26 22:32:48,224 pid=1031 middleware:34  POST /api/v1/predictions/generate/ → 400 (1.3ms) user=80 size=105B
+WARNING 2026-05-26 22:32:48,224 pid=1031 django.request:241  Bad Request: /api/v1/predictions/generate/
+WARNING 2026-05-26 22:32:48,372 pid=1031 middleware:34  POST /api/v1/predictions/generate/ → 400 (1.3ms) user=81 size=105B
+WARNING 2026-05-26 22:32:48,372 pid=1031 django.request:241  Bad Request: /api/v1/predictions/generate/
+WARNING 2026-05-26 22:32:48,838 pid=1031 middleware:34  POST /api/v1/predictions/generate/ → 401 (0.4ms) user=- size=58B
+WARNING 2026-05-26 22:32:48,839 pid=1031 django.request:241  Unauthorized: /api/v1/predictions/generate/
+WARNING 2026-05-26 22:32:49,151 pid=1031 middleware:34  GET /api/v1/predictions/latest/ → 404 (0.8ms) user=85 size=32B
+WARNING 2026-05-26 22:32:49,152 pid=1031 django.request:241  Not Found: /api/v1/predictions/latest/
+WARNING 2026-05-26 22:35:05,623 pid=1124 middleware:34  POST /api/v1/auth/register/ → 400 (2.8ms) user=- size=96B
+WARNING 2026-05-26 22:35:05,624 pid=1124 django.request:241  Bad Request: /api/v1/auth/register/
+WARNING 2026-05-26 22:35:05,771 pid=1124 middleware:34  POST /api/v1/auth/register/ → 400 (1.7ms) user=- size=116B
+WARNING 2026-05-26 22:35:05,771 pid=1124 django.request:241  Bad Request: /api/v1/auth/register/
+WARNING 2026-05-26 22:35:05,775 pid=1124 middleware:34  POST /api/v1/auth/register/ → 400 (1.7ms) user=- size=138B
+WARNING 2026-05-26 22:35:05,775 pid=1124 django.request:241  Bad Request: /api/v1/auth/register/
+WARNING 2026-05-26 22:35:05,779 pid=1124 middleware:34  POST /api/v1/auth/register/ → 400 (1.3ms) user=- size=90B
+WARNING 2026-05-26 22:35:05,779 pid=1124 django.request:241  Bad Request: /api/v1/auth/register/
+WARNING 2026-05-26 22:35:06,661 pid=1124 middleware:34  POST /api/v1/auth/login/ → 401 (144.2ms) user=- size=63B
+WARNING 2026-05-26 22:35:06,661 pid=1124 django.request:241  Unauthorized: /api/v1/auth/login/
+WARNING 2026-05-26 22:35:06,808 pid=1124 middleware:34  POST /api/v1/auth/login/ → 401 (144.2ms) user=- size=63B
+WARNING 2026-05-26 22:35:06,808 pid=1124 django.request:241  Unauthorized: /api/v1/auth/login/
+WARNING 2026-05-26 22:35:06,958 pid=1124 middleware:34  POST /api/v1/auth/login/ → 400 (0.5ms) user=- size=96B
+WARNING 2026-05-26 22:35:06,959 pid=1124 django.request:241  Bad Request: /api/v1/auth/login/
+WARNING 2026-05-26 22:35:06,962 pid=1124 middleware:34  GET /api/v1/auth/me/ → 401 (0.5ms) user=- size=58B
+WARNING 2026-05-26 22:35:06,963 pid=1124 django.request:241  Unauthorized: /api/v1/auth/me/
+WARNING 2026-05-26 22:35:08,622 pid=1124 middleware:34  POST /api/v1/auth/change-password/ → 400 (142.7ms) user=16 size=38B
+WARNING 2026-05-26 22:35:08,622 pid=1124 django.request:241  Bad Request: /api/v1/auth/change-password/
+WARNING 2026-05-26 22:35:08,770 pid=1124 middleware:34  POST /api/v1/auth/change-password/ → 400 (0.5ms) user=17 size=104B
+WARNING 2026-05-26 22:35:08,770 pid=1124 django.request:241  Bad Request: /api/v1/auth/change-password/
+WARNING 2026-05-26 22:35:09,218 pid=1124 apps.accounts.views:54  Logout failed (bad/missing refresh token): Token is invalid or expired
+WARNING 2026-05-26 22:35:09,218 pid=1124 middleware:34  POST /api/v1/auth/logout/ → 400 (0.8ms) user=19 size=27B
+WARNING 2026-05-26 22:35:09,218 pid=1124 django.request:241  Bad Request: /api/v1/auth/logout/
+WARNING 2026-05-26 22:35:09,363 pid=1124 apps.accounts.views:54  Logout failed (bad/missing refresh token): 'refresh'
+WARNING 2026-05-26 22:35:09,364 pid=1124 middleware:34  POST /api/v1/auth/logout/ → 400 (0.7ms) user=20 size=27B
+WARNING 2026-05-26 22:35:09,364 pid=1124 django.request:241  Bad Request: /api/v1/auth/logout/
+WARNING 2026-05-26 22:35:09,828 pid=1124 middleware:34  GET /api/v1/appliances/ → 401 (0.4ms) user=- size=58B
+WARNING 2026-05-26 22:35:09,828 pid=1124 django.request:241  Unauthorized: /api/v1/appliances/
+WARNING 2026-05-26 22:35:09,830 pid=1124 middleware:34  POST /api/v1/appliances/analyze/ → 401 (0.4ms) user=- size=58B
+WARNING 2026-05-26 22:35:09,831 pid=1124 django.request:241  Unauthorized: /api/v1/appliances/analyze/
+WARNING 2026-05-26 22:35:11,338 pid=1124 middleware:34  GET /api/v1/appliances/15/ → 404 (1.1ms) user=32 size=54B
+WARNING 2026-05-26 22:35:11,339 pid=1124 django.request:241  Not Found: /api/v1/appliances/15/
+WARNING 2026-05-26 22:35:11,341 pid=1124 middleware:34  GET /api/v1/appliances/catalog/ → 401 (0.2ms) user=- size=58B
+WARNING 2026-05-26 22:35:11,341 pid=1124 django.request:241  Unauthorized: /api/v1/appliances/catalog/
+WARNING 2026-05-26 22:35:11,946 pid=1124 middleware:34  POST /api/v1/appliances/analyze/ → 400 (0.3ms) user=37 size=100B
+WARNING 2026-05-26 22:35:11,947 pid=1124 django.request:241  Bad Request: /api/v1/appliances/analyze/
+WARNING 2026-05-26 22:35:12,279 pid=1124 middleware:34  POST /api/v1/appliances/optimize/ → 400 (1.0ms) user=39 size=96B
+WARNING 2026-05-26 22:35:12,279 pid=1124 django.request:241  Bad Request: /api/v1/appliances/optimize/
+WARNING 2026-05-26 22:35:12,575 pid=1124 middleware:34  POST /api/v1/appliances/optimize/ → 400 (0.9ms) user=41 size=96B
+WARNING 2026-05-26 22:35:12,576 pid=1124 django.request:241  Bad Request: /api/v1/appliances/optimize/
+WARNING 2026-05-26 22:35:12,578 pid=1124 middleware:34  GET /api/v1/budget/ → 401 (0.2ms) user=- size=58B
+WARNING 2026-05-26 22:35:12,579 pid=1124 django.request:241  Unauthorized: /api/v1/budget/
+WARNING 2026-05-26 22:35:12,726 pid=1124 middleware:34  GET /api/v1/budget/ → 404 (0.6ms) user=42 size=34B
+WARNING 2026-05-26 22:35:12,726 pid=1124 django.request:241  Not Found: /api/v1/budget/
+ERROR 2026-05-26 22:35:15,084 pid=1124 tasks.cycle_tasks:263  User 56: LESCO fetch trigger failed: Aggregate functions are not allowed in this query (celery_task_id=<MagicMock name='delay().id.resolve_expression().resolve_expression()' id='281473042313040'>).. Falling back to direct predict.
+ERROR 2026-05-26 22:35:15,462 pid=1124 tasks.cycle_tasks:263  User 58: LESCO fetch trigger failed: fetch boom. Falling back to direct predict.
+WARNING 2026-05-26 22:35:15,608 pid=1124 tasks.cycle_tasks:120  User 59: IoT query failed in rollover: DB gone
+ERROR 2026-05-26 22:35:15,611 pid=1124 tasks.cycle_tasks:263  User 59: LESCO fetch trigger failed: Aggregate functions are not allowed in this query (celery_task_id=<MagicMock name='delay().id.resolve_expression().resolve_expression()' id='281473038941136'>).. Falling back to direct predict.
+ERROR 2026-05-26 22:35:18,890 pid=1124 apps:23  Unhandled exception in view
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/apps/predictions/views.py", line 255, in get
+    "current_bill_pkr":    ctx["current_bill_pkr"],
+                           ~~~^^^^^^^^^^^^^^^^^^^^
+KeyError: 'current_bill_pkr'
+ERROR 2026-05-26 22:35:18,893 pid=1124 middleware:32  GET /api/v1/predictions/iot-status/ → 500 (5.8ms) user=80 size=66B
+ERROR 2026-05-26 22:35:18,894 pid=1124 django.request:241  Internal Server Error: /api/v1/predictions/iot-status/
+WARNING 2026-05-26 22:35:19,097 pid=1124 middleware:34  POST /api/v1/predictions/generate/ → 400 (1.9ms) user=81 size=105B
+WARNING 2026-05-26 22:35:19,098 pid=1124 django.request:241  Bad Request: /api/v1/predictions/generate/
+WARNING 2026-05-26 22:35:19,246 pid=1124 middleware:34  POST /api/v1/predictions/generate/ → 400 (1.3ms) user=82 size=105B
+WARNING 2026-05-26 22:35:19,246 pid=1124 django.request:241  Bad Request: /api/v1/predictions/generate/
+WARNING 2026-05-26 22:35:19,675 pid=1124 middleware:34  POST /api/v1/predictions/generate/ → 401 (0.2ms) user=- size=58B
+WARNING 2026-05-26 22:35:19,675 pid=1124 django.request:241  Unauthorized: /api/v1/predictions/generate/
+WARNING 2026-05-26 22:35:20,001 pid=1124 middleware:34  GET /api/v1/predictions/latest/ → 404 (1.2ms) user=86 size=32B
+WARNING 2026-05-26 22:35:20,001 pid=1124 django.request:241  Not Found: /api/v1/predictions/latest/
+WARNING 2026-05-26 22:35:50,006 pid=1161 middleware:34  POST /api/v1/auth/register/ → 400 (2.7ms) user=- size=96B
+WARNING 2026-05-26 22:35:50,007 pid=1161 django.request:241  Bad Request: /api/v1/auth/register/
+WARNING 2026-05-26 22:35:50,153 pid=1161 middleware:34  POST /api/v1/auth/register/ → 400 (2.1ms) user=- size=116B
+WARNING 2026-05-26 22:35:50,154 pid=1161 django.request:241  Bad Request: /api/v1/auth/register/
+WARNING 2026-05-26 22:35:50,158 pid=1161 middleware:34  POST /api/v1/auth/register/ → 400 (1.8ms) user=- size=138B
+WARNING 2026-05-26 22:35:50,158 pid=1161 django.request:241  Bad Request: /api/v1/auth/register/
+WARNING 2026-05-26 22:35:50,161 pid=1161 middleware:34  POST /api/v1/auth/register/ → 400 (1.2ms) user=- size=90B
+WARNING 2026-05-26 22:35:50,161 pid=1161 django.request:241  Bad Request: /api/v1/auth/register/
+WARNING 2026-05-26 22:35:51,036 pid=1161 middleware:34  POST /api/v1/auth/login/ → 401 (143.2ms) user=- size=63B
+WARNING 2026-05-26 22:35:51,037 pid=1161 django.request:241  Unauthorized: /api/v1/auth/login/
+WARNING 2026-05-26 22:35:51,184 pid=1161 middleware:34  POST /api/v1/auth/login/ → 401 (144.6ms) user=- size=63B
+WARNING 2026-05-26 22:35:51,184 pid=1161 django.request:241  Unauthorized: /api/v1/auth/login/
+WARNING 2026-05-26 22:35:51,331 pid=1161 middleware:34  POST /api/v1/auth/login/ → 400 (0.4ms) user=- size=96B
+WARNING 2026-05-26 22:35:51,331 pid=1161 django.request:241  Bad Request: /api/v1/auth/login/
+WARNING 2026-05-26 22:35:51,334 pid=1161 middleware:34  GET /api/v1/auth/me/ → 401 (0.4ms) user=- size=58B
+WARNING 2026-05-26 22:35:51,334 pid=1161 django.request:241  Unauthorized: /api/v1/auth/me/
+WARNING 2026-05-26 22:35:52,989 pid=1161 middleware:34  POST /api/v1/auth/change-password/ → 400 (144.9ms) user=16 size=38B
+WARNING 2026-05-26 22:35:52,990 pid=1161 django.request:241  Bad Request: /api/v1/auth/change-password/
+WARNING 2026-05-26 22:35:53,138 pid=1161 middleware:34  POST /api/v1/auth/change-password/ → 400 (0.6ms) user=17 size=104B
+WARNING 2026-05-26 22:35:53,138 pid=1161 django.request:241  Bad Request: /api/v1/auth/change-password/
+WARNING 2026-05-26 22:35:53,586 pid=1161 apps.accounts.views:54  Logout failed (bad/missing refresh token): Token is invalid or expired
+WARNING 2026-05-26 22:35:53,587 pid=1161 middleware:34  POST /api/v1/auth/logout/ → 400 (0.9ms) user=19 size=27B
+WARNING 2026-05-26 22:35:53,587 pid=1161 django.request:241  Bad Request: /api/v1/auth/logout/
+WARNING 2026-05-26 22:35:53,743 pid=1161 apps.accounts.views:54  Logout failed (bad/missing refresh token): 'refresh'
+WARNING 2026-05-26 22:35:53,743 pid=1161 middleware:34  POST /api/v1/auth/logout/ → 400 (0.8ms) user=20 size=27B
+WARNING 2026-05-26 22:35:53,743 pid=1161 django.request:241  Bad Request: /api/v1/auth/logout/
+WARNING 2026-05-26 22:35:54,205 pid=1161 middleware:34  GET /api/v1/appliances/ → 401 (0.8ms) user=- size=58B
+WARNING 2026-05-26 22:35:54,206 pid=1161 django.request:241  Unauthorized: /api/v1/appliances/
+WARNING 2026-05-26 22:35:54,208 pid=1161 middleware:34  POST /api/v1/appliances/analyze/ → 401 (0.3ms) user=- size=58B
+WARNING 2026-05-26 22:35:54,208 pid=1161 django.request:241  Unauthorized: /api/v1/appliances/analyze/
+WARNING 2026-05-26 22:35:55,689 pid=1161 middleware:34  GET /api/v1/appliances/15/ → 404 (0.8ms) user=32 size=54B
+WARNING 2026-05-26 22:35:55,689 pid=1161 django.request:241  Not Found: /api/v1/appliances/15/
+WARNING 2026-05-26 22:35:55,692 pid=1161 middleware:34  GET /api/v1/appliances/catalog/ → 401 (0.2ms) user=- size=58B
+WARNING 2026-05-26 22:35:55,692 pid=1161 django.request:241  Unauthorized: /api/v1/appliances/catalog/
+WARNING 2026-05-26 22:35:56,279 pid=1161 middleware:34  POST /api/v1/appliances/analyze/ → 400 (0.4ms) user=37 size=100B
+WARNING 2026-05-26 22:35:56,279 pid=1161 django.request:241  Bad Request: /api/v1/appliances/analyze/
+WARNING 2026-05-26 22:35:56,590 pid=1161 middleware:34  POST /api/v1/appliances/optimize/ → 400 (1.0ms) user=39 size=96B
+WARNING 2026-05-26 22:35:56,590 pid=1161 django.request:241  Bad Request: /api/v1/appliances/optimize/
+WARNING 2026-05-26 22:35:56,888 pid=1161 middleware:34  POST /api/v1/appliances/optimize/ → 400 (1.1ms) user=41 size=96B
+WARNING 2026-05-26 22:35:56,888 pid=1161 django.request:241  Bad Request: /api/v1/appliances/optimize/
+WARNING 2026-05-26 22:35:56,891 pid=1161 middleware:34  GET /api/v1/budget/ → 401 (0.3ms) user=- size=58B
+WARNING 2026-05-26 22:35:56,891 pid=1161 django.request:241  Unauthorized: /api/v1/budget/
+WARNING 2026-05-26 22:35:57,037 pid=1161 middleware:34  GET /api/v1/budget/ → 404 (0.7ms) user=42 size=34B
+WARNING 2026-05-26 22:35:57,037 pid=1161 django.request:241  Not Found: /api/v1/budget/
+ERROR 2026-05-26 22:35:59,163 pid=1161 tasks.cycle_tasks:263  User 56: LESCO fetch trigger failed: Aggregate functions are not allowed in this query (celery_task_id=<MagicMock name='delay().id.resolve_expression().resolve_expression()' id='281472815432016'>).. Falling back to direct predict.
+ERROR 2026-05-26 22:35:59,511 pid=1161 tasks.cycle_tasks:263  User 58: LESCO fetch trigger failed: fetch boom. Falling back to direct predict.
+WARNING 2026-05-26 22:35:59,656 pid=1161 tasks.cycle_tasks:120  User 59: IoT query failed in rollover: DB gone
+ERROR 2026-05-26 22:35:59,659 pid=1161 tasks.cycle_tasks:263  User 59: LESCO fetch trigger failed: Aggregate functions are not allowed in this query (celery_task_id=<MagicMock name='delay().id.resolve_expression().resolve_expression()' id='281472793628688'>).. Falling back to direct predict.
+WARNING 2026-05-26 22:36:03,196 pid=1161 middleware:34  POST /api/v1/predictions/generate/ → 400 (2.3ms) user=81 size=105B
+WARNING 2026-05-26 22:36:03,197 pid=1161 django.request:241  Bad Request: /api/v1/predictions/generate/
+WARNING 2026-05-26 22:36:03,343 pid=1161 middleware:34  POST /api/v1/predictions/generate/ → 400 (1.2ms) user=82 size=105B
+WARNING 2026-05-26 22:36:03,344 pid=1161 django.request:241  Bad Request: /api/v1/predictions/generate/
+WARNING 2026-05-26 22:36:03,771 pid=1161 middleware:34  POST /api/v1/predictions/generate/ → 401 (0.5ms) user=- size=58B
+WARNING 2026-05-26 22:36:03,772 pid=1161 django.request:241  Unauthorized: /api/v1/predictions/generate/
+WARNING 2026-05-26 22:36:04,101 pid=1161 middleware:34  GET /api/v1/predictions/latest/ → 404 (2.0ms) user=86 size=32B
+WARNING 2026-05-26 22:36:04,101 pid=1161 django.request:241  Not Found: /api/v1/predictions/latest/
+WARNING 2026-05-27 00:21:30,461 pid=31 middleware:34  GET /api/v1/notifications/unread/ → 401 (14.4ms) user=- size=183B
+WARNING 2026-05-27 00:21:30,463 pid=31 django.request:241  Unauthorized: /api/v1/notifications/unread/
+WARNING 2026-05-27 01:21:30,493 pid=31 middleware:34  GET /api/v1/notifications/unread/ → 401 (12.6ms) user=- size=183B
+WARNING 2026-05-27 01:21:30,502 pid=31 django.request:241  Unauthorized: /api/v1/notifications/unread/
+WARNING 2026-05-27 02:21:30,366 pid=31 middleware:34  GET /api/v1/notifications/unread/ → 401 (14.1ms) user=- size=183B
+WARNING 2026-05-27 02:21:30,368 pid=31 django.request:241  Unauthorized: /api/v1/notifications/unread/
+WARNING 2026-05-27 03:22:29,830 pid=31 middleware:34  GET /api/v1/notifications/unread/ → 401 (10.3ms) user=- size=183B
+WARNING 2026-05-27 03:22:29,833 pid=31 django.request:241  Unauthorized: /api/v1/notifications/unread/
+WARNING 2026-05-27 04:52:49,694 pid=31 middleware:34  GET /api/v1/notifications/unread/ → 401 (8.9ms) user=- size=183B
+WARNING 2026-05-27 04:52:49,699 pid=31 django.request:241  Unauthorized: /api/v1/notifications/unread/
+WARNING 2026-05-27 06:11:11,416 pid=31 middleware:34  GET /api/v1/notifications/unread/ → 401 (18.6ms) user=- size=183B
+WARNING 2026-05-27 06:11:11,419 pid=31 django.request:241  Unauthorized: /api/v1/notifications/unread/
+WARNING 2026-05-27 07:18:52,867 pid=31 middleware:34  GET /api/v1/notifications/unread/ → 401 (7.9ms) user=- size=183B
+WARNING 2026-05-27 07:18:52,870 pid=31 django.request:241  Unauthorized: /api/v1/notifications/unread/
+WARNING 2026-05-27 08:20:40,293 pid=31 middleware:34  GET /api/v1/notifications/unread/ → 401 (9.6ms) user=- size=183B
+WARNING 2026-05-27 08:20:40,298 pid=31 django.request:241  Unauthorized: /api/v1/notifications/unread/
+WARNING 2026-05-27 09:30:49,579 pid=31 middleware:34  GET /api/v1/notifications/unread/ → 401 (8.5ms) user=- size=183B
+WARNING 2026-05-27 09:30:49,587 pid=31 django.request:241  Unauthorized: /api/v1/notifications/unread/
+WARNING 2026-05-27 10:36:15,983 pid=31 middleware:34  GET /api/v1/notifications/unread/ → 401 (6.9ms) user=- size=183B
+WARNING 2026-05-27 10:36:15,986 pid=31 django.request:241  Unauthorized: /api/v1/notifications/unread/
+WARNING 2026-05-27 12:09:21,082 pid=31 middleware:34  GET /api/v1/notifications/unread/ → 401 (6.3ms) user=- size=183B
+WARNING 2026-05-27 12:09:21,084 pid=31 django.request:241  Unauthorized: /api/v1/notifications/unread/
+WARNING 2026-05-27 14:30:16,924 pid=31 middleware:34  GET /api/v1/notifications/unread/ → 401 (5.0ms) user=- size=183B
+WARNING 2026-05-27 14:30:16,928 pid=31 django.request:241  Unauthorized: /api/v1/notifications/unread/
+WARNING 2026-05-27 15:30:21,099 pid=31 middleware:34  GET /api/v1/notifications/unread/ → 401 (8.4ms) user=- size=183B
+WARNING 2026-05-27 15:30:21,105 pid=31 django.request:241  Unauthorized: /api/v1/notifications/unread/

@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip3 install *)",
+      "Bash(python3 -c ' *)",
+      "Bash(python3)",
+      "Bash(docker compose *)",
+      "Bash(docker exec backend-api-1 python -W ignore -c ' *)",
+      "Bash(python -c ' *)"
+    ]
+  }
+}

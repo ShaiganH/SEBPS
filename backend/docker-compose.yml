@@ -1,0 +1,134 @@
+services:
+  db:
+    image: timescale/timescaledb:latest-pg16
+    environment:
+      POSTGRES_DB: sebps_db
+      POSTGRES_USER: sebps
+      POSTGRES_PASSWORD: sebps_pass
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sebps -d sebps_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redisdata:/data
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  api:
+    build: .
+    # api is the ONLY service that runs makemigrations + migrate.
+    # celery_worker and celery_beat depend on api:service_healthy, so they
+    # will never start until all migrations are applied and daphne is up.
+    command: >-
+      sh -c "python manage.py makemigrations accounts bills ocr predictions iot appliances budget recommendations chatbot notifications --no-input &&
+             python manage.py migrate --no-input &&
+             python manage.py load_appliance_catalog &&
+             daphne -b 0.0.0.0 -p 8000 config.asgi:application"
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.base
+      - DEBUG=True
+      - SECRET_KEY=dev-secret-key-change-in-prod
+      - DATABASE_URL=postgres://sebps:sebps_pass@db:5432/sebps_db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+      - CORS_ALLOWED_ORIGINS=http://localhost:3000,http://localhost:8081
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+      # Mount sibling module directories so sys.path entries resolve inside the container.
+      # BASE_DIR.parent == /  →  /module_1_predictor, /module_2_ocr, etc.
+      - ../module_1_predictor:/module_1_predictor
+      - ../module_2_ocr:/module_2_ocr
+      - ../module_3_fetcher:/module_3_fetcher
+      - ../module_4_recommender:/module_4_recommender
+      - ../module_5_chatbot:/module_5_chatbot
+      - media_files:/app/media
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/docs/', timeout=8)\" 2>/dev/null || exit 1"]
+      interval: 15s
+      timeout: 10s
+      retries: 6
+      start_period: 90s
+
+  celery_worker:
+    build: .
+    # No migrate here — api:service_healthy guarantees all migrations are done.
+    command: celery -A tasks.celery worker --loglevel=info --concurrency=4
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.base
+      - DEBUG=True
+      - SECRET_KEY=dev-secret-key-change-in-prod
+      - DATABASE_URL=postgres://sebps:sebps_pass@db:5432/sebps_db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    volumes:
+      - .:/app
+      - ../module_1_predictor:/module_1_predictor
+      - ../module_2_ocr:/module_2_ocr
+      - ../module_3_fetcher:/module_3_fetcher
+      - ../module_4_recommender:/module_4_recommender
+      - ../module_5_chatbot:/module_5_chatbot
+      - media_files:/app/media
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+    env_file:
+      - .env
+
+  celery_beat:
+    build: .
+    # Single-line command avoids YAML folded-scalar newline-in-string bugs.
+    # No migrate here — api:service_healthy guarantees all migrations are done.
+    command: celery -A tasks.celery beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    environment:
+      - DJANGO_SETTINGS_MODULE=config.settings.base
+      - DEBUG=True
+      - SECRET_KEY=dev-secret-key-change-in-prod
+      - DATABASE_URL=postgres://sebps:sebps_pass@db:5432/sebps_db
+      - REDIS_URL=redis://redis:6379/0
+      - CELERY_BROKER_URL=redis://redis:6379/1
+      - CELERY_RESULT_BACKEND=redis://redis:6379/2
+    volumes:
+      - .:/app
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+    env_file:
+      - .env
+
+volumes:
+  pgdata:
+  redisdata:
+  media_files:
