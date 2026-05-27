@@ -176,6 +176,7 @@ services:
 
   mobile:
     build: ./mobile
+    tty: true          # gives Expo a real TTY so the QR code renders in `docker logs`
     environment:
       # Tells Metro which IP to advertise in the QR code / connection URL
       - REACT_NATIVE_PACKAGER_HOSTNAME=${HOST_IP:-localhost}

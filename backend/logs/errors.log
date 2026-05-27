@@ -207,3 +207,353 @@ WARNING 2026-05-27 15:30:21,099 pid=31 middleware:34  GET /api/v1/notifications/
 WARNING 2026-05-27 15:30:21,105 pid=31 django.request:241  Unauthorized: /api/v1/notifications/unread/
 WARNING 2026-05-27 16:30:22,761 pid=31 middleware:34  GET /api/v1/predictions/iot-status/ → 401 (4.7ms) user=- size=183B
 WARNING 2026-05-27 16:30:22,765 pid=31 django.request:241  Unauthorized: /api/v1/predictions/iot-status/
+WARNING 2026-05-27 17:31:05,566 pid=38 middleware:34  GET /api/v1/notifications/unread/ → 401 (26.0ms) user=- size=183B
+WARNING 2026-05-27 17:31:05,571 pid=38 django.request:241  Unauthorized: /api/v1/notifications/unread/
+WARNING 2026-05-27 18:40:57,996 pid=38 middleware:34  GET /api/v1/notifications/unread/ → 401 (8.3ms) user=- size=183B
+WARNING 2026-05-27 18:40:58,002 pid=38 django.request:241  Unauthorized: /api/v1/notifications/unread/
+WARNING 2026-05-27 20:14:56,781 pid=38 middleware:34  GET /api/v1/notifications/unread/ → 401 (14.6ms) user=- size=183B
+WARNING 2026-05-27 20:14:56,786 pid=38 django.request:241  Unauthorized: /api/v1/notifications/unread/
+WARNING 2026-05-27 21:15:44,753 pid=38 middleware:34  GET /api/v1/predictions/iot-status/ → 401 (28.1ms) user=- size=183B
+WARNING 2026-05-27 21:15:44,754 pid=38 middleware:34  GET /api/v1/notifications/unread/ → 401 (28.8ms) user=- size=183B
+WARNING 2026-05-27 21:15:44,764 pid=38 django.request:241  Unauthorized: /api/v1/predictions/iot-status/
+WARNING 2026-05-27 21:15:44,772 pid=38 django.request:241  Unauthorized: /api/v1/notifications/unread/
+ERROR 2026-05-27 21:25:14,569 pid=38 django.security.DisallowedHost:124  Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+WARNING 2026-05-27 21:25:14,820 pid=38 django.request:241  Bad Request: /api/v1/auth/login/
+ERROR 2026-05-27 21:25:50,140 pid=38 django.security.DisallowedHost:124  Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+WARNING 2026-05-27 21:25:50,185 pid=38 django.request:241  Bad Request: /api/v1/auth/login/
+ERROR 2026-05-27 21:27:28,240 pid=38 django.security.DisallowedHost:124  Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+WARNING 2026-05-27 21:27:28,278 pid=38 django.request:241  Bad Request: /api/v1/auth/login/
+ERROR 2026-05-27 21:27:39,092 pid=38 django.security.DisallowedHost:124  Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+WARNING 2026-05-27 21:27:39,129 pid=38 django.request:241  Bad Request: /api/v1/auth/login/
+ERROR 2026-05-27 21:28:03,014 pid=38 django.security.DisallowedHost:124  Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+WARNING 2026-05-27 21:28:03,040 pid=38 django.request:241  Bad Request: /api/v1/auth/login/
+ERROR 2026-05-27 21:28:47,778 pid=38 django.security.DisallowedHost:124  Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+WARNING 2026-05-27 21:28:47,820 pid=38 django.request:241  Bad Request: /api/v1/auth/login/
+ERROR 2026-05-27 21:28:48,622 pid=38 django.security.DisallowedHost:124  Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+WARNING 2026-05-27 21:28:48,642 pid=38 django.request:241  Bad Request: /api/v1/auth/login/
+ERROR 2026-05-27 21:30:07,494 pid=37 django.security.DisallowedHost:124  Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+WARNING 2026-05-27 21:30:07,549 pid=37 django.request:241  Bad Request: /api/v1/auth/login/
+ERROR 2026-05-27 21:30:16,279 pid=37 django.security.DisallowedHost:124  Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+WARNING 2026-05-27 21:30:16,317 pid=37 django.request:241  Bad Request: /api/v1/auth/login/
+ERROR 2026-05-27 21:30:18,062 pid=37 django.security.DisallowedHost:124  Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+WARNING 2026-05-27 21:30:18,088 pid=37 django.request:241  Bad Request: /api/v1/auth/login/
+ERROR 2026-05-27 21:30:19,055 pid=37 django.security.DisallowedHost:124  Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+WARNING 2026-05-27 21:30:19,080 pid=37 django.request:241  Bad Request: /api/v1/auth/login/
+ERROR 2026-05-27 21:31:19,641 pid=37 django.security.DisallowedHost:124  Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+WARNING 2026-05-27 21:31:19,658 pid=37 django.request:241  Bad Request: /api/v1/auth/login/
+ERROR 2026-05-27 21:31:31,392 pid=37 django.security.DisallowedHost:124  Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+WARNING 2026-05-27 21:31:31,416 pid=37 django.request:241  Bad Request: /api/v1/auth/login/
+ERROR 2026-05-27 21:33:05,968 pid=37 django.security.DisallowedHost:124  Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+WARNING 2026-05-27 21:33:05,990 pid=37 django.request:241  Bad Request: /api/v1/auth/login/
+ERROR 2026-05-27 21:33:56,194 pid=37 django.security.DisallowedHost:124  Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+WARNING 2026-05-27 21:33:56,230 pid=37 django.request:241  Bad Request: /api/v1/auth/login/
+ERROR 2026-05-27 21:34:04,732 pid=37 django.security.DisallowedHost:124  Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '192.168.1.52:8000'. You may need to add '192.168.1.52' to ALLOWED_HOSTS.
+WARNING 2026-05-27 21:34:04,768 pid=37 django.request:241  Bad Request: /api/v1/auth/login/
+WARNING 2026-05-27 21:35:46,891 pid=31 middleware:34  POST /api/v1/auth/login/ → 401 (259.3ms) user=- size=63B
+WARNING 2026-05-27 21:35:46,897 pid=31 django.request:241  Unauthorized: /api/v1/auth/login/
+WARNING 2026-05-27 21:36:07,947 pid=31 middleware:34  GET /api/v1/bills/jobs/ → 404 (17.0ms) user=- size=5826B
+WARNING 2026-05-27 21:36:07,951 pid=31 django.request:241  Not Found: /api/v1/bills/jobs/
+WARNING 2026-05-27 21:37:08,727 pid=31 middleware:34  GET /api/v1/predictions/dashboard/ → 404 (12.4ms) user=- size=5913B
+WARNING 2026-05-27 21:37:08,729 pid=31 django.request:241  Not Found: /api/v1/predictions/dashboard/
+WARNING 2026-05-27 21:37:10,965 pid=31 middleware:34  GET /api/v1/predictions/dashboard/ → 404 (4.5ms) user=- size=5913B
+WARNING 2026-05-27 21:37:10,965 pid=31 django.request:241  Not Found: /api/v1/predictions/dashboard/
+WARNING 2026-05-27 21:37:13,703 pid=31 middleware:34  GET /api/v1/predictions/dashboard/ → 404 (12.1ms) user=- size=5913B
+WARNING 2026-05-27 21:37:13,706 pid=31 django.request:241  Not Found: /api/v1/predictions/dashboard/
+WARNING 2026-05-27 22:14:27,870 pid=31 middleware:34  GET /api/v1/predictions/dashboard/ → 404 (26.8ms) user=- size=5913B
+WARNING 2026-05-27 22:14:27,874 pid=31 django.request:241  Not Found: /api/v1/predictions/dashboard/
+WARNING 2026-05-27 22:14:29,730 pid=31 middleware:34  GET /api/v1/budget/status/ → 404 (10.8ms) user=- size=5326B
+WARNING 2026-05-27 22:14:29,733 pid=31 django.request:241  Not Found: /api/v1/budget/status/
+WARNING 2026-05-27 22:15:50,214 pid=31 middleware:34  GET /api/v1/predictions/dashboard/ → 404 (20.0ms) user=- size=5913B
+WARNING 2026-05-27 22:15:50,216 pid=31 django.request:241  Not Found: /api/v1/predictions/dashboard/
+WARNING 2026-05-27 22:16:11,708 pid=31 middleware:34  GET /api/v1/budget/status/ → 404 (15.6ms) user=- size=5326B
+WARNING 2026-05-27 22:16:11,710 pid=31 django.request:241  Not Found: /api/v1/budget/status/
+WARNING 2026-05-27 22:17:42,934 pid=31 middleware:34  GET /api/v1/predictions/dashboard/ → 404 (29.3ms) user=- size=5913B
+WARNING 2026-05-27 22:17:42,938 pid=31 django.request:241  Not Found: /api/v1/predictions/dashboard/
+WARNING 2026-05-27 22:17:46,502 pid=31 middleware:34  GET /api/v1/budget/status/ → 404 (16.4ms) user=- size=5326B
+WARNING 2026-05-27 22:17:46,503 pid=31 django.request:241  Not Found: /api/v1/budget/status/
+WARNING 2026-05-27 22:26:05,811 pid=31 middleware:34  GET /api/v1/notifications/unread/ → 401 (6.9ms) user=- size=183B
+WARNING 2026-05-27 22:26:05,815 pid=31 django.request:241  Unauthorized: /api/v1/notifications/unread/
+WARNING 2026-05-27 22:30:39,095 pid=31 middleware:34  POST /api/v1/auth/login/ → 401 (188.7ms) user=- size=63B
+WARNING 2026-05-27 22:30:39,098 pid=31 django.request:241  Unauthorized: /api/v1/auth/login/
+WARNING 2026-05-27 22:30:39,124 pid=31 middleware:34  GET /api/v1/budget/status/ → 404 (6.8ms) user=- size=5326B
+WARNING 2026-05-27 22:30:39,125 pid=31 django.request:241  Not Found: /api/v1/budget/status/
+WARNING 2026-05-27 22:30:39,140 pid=31 middleware:34  GET /api/v1/budget/ → 401 (1.1ms) user=- size=183B
+WARNING 2026-05-27 22:30:39,141 pid=31 django.request:241  Unauthorized: /api/v1/budget/
+WARNING 2026-05-27 22:30:39,226 pid=31 middleware:34  GET /api/v1/bills/jobs/ → 404 (3.4ms) user=- size=5826B
+WARNING 2026-05-27 22:30:39,227 pid=31 django.request:241  Not Found: /api/v1/bills/jobs/
+WARNING 2026-05-27 22:30:39,242 pid=31 middleware:34  GET /api/v1/predictions/dashboard/ → 404 (3.1ms) user=- size=5913B
+WARNING 2026-05-27 22:30:39,243 pid=31 django.request:241  Not Found: /api/v1/predictions/dashboard/
+WARNING 2026-05-27 22:30:39,256 pid=31 middleware:34  GET /api/v1/predictions/iot-status/ → 401 (0.9ms) user=- size=183B
+WARNING 2026-05-27 22:30:39,257 pid=31 django.request:241  Unauthorized: /api/v1/predictions/iot-status/
+WARNING 2026-05-27 22:33:42,008 pid=31 middleware:34  POST /api/v1/auth/login/ → 401 (194.3ms) user=- size=63B
+WARNING 2026-05-27 22:33:42,011 pid=31 django.request:241  Unauthorized: /api/v1/auth/login/
+WARNING 2026-05-27 22:33:42,033 pid=31 middleware:34  GET /api/v1/budget/ → 401 (1.4ms) user=- size=183B
+WARNING 2026-05-27 22:33:42,033 pid=31 django.request:241  Unauthorized: /api/v1/budget/
+WARNING 2026-05-27 22:33:42,119 pid=31 middleware:34  GET /api/v1/bills/fetch/jobs/ → 401 (3.7ms) user=- size=183B
+WARNING 2026-05-27 22:33:42,120 pid=31 django.request:241  Unauthorized: /api/v1/bills/fetch/jobs/
+WARNING 2026-05-27 22:33:42,133 pid=31 middleware:34  GET /api/v1/predictions/iot-status/ → 401 (0.7ms) user=- size=183B
+WARNING 2026-05-27 22:33:42,134 pid=31 django.request:241  Unauthorized: /api/v1/predictions/iot-status/
+WARNING 2026-05-27 22:33:42,219 pid=31 middleware:34  POST /api/v1/notifications/read-all/ → 401 (0.7ms) user=- size=183B
+WARNING 2026-05-27 22:33:42,219 pid=31 django.request:241  Unauthorized: /api/v1/notifications/read-all/
+WARNING 2026-05-27 22:34:01,732 pid=31 middleware:34  GET /api/v1/budget/ → 401 (10.6ms) user=- size=58B
+WARNING 2026-05-27 22:34:01,735 pid=31 django.request:241  Unauthorized: /api/v1/budget/
+WARNING 2026-05-27 22:34:01,752 pid=31 middleware:34  GET /api/v1/bills/fetch/jobs/ → 401 (1.0ms) user=- size=58B
+WARNING 2026-05-27 22:34:01,753 pid=31 django.request:241  Unauthorized: /api/v1/bills/fetch/jobs/
+WARNING 2026-05-27 22:34:01,767 pid=31 middleware:34  GET /api/v1/predictions/iot-status/ → 401 (0.9ms) user=- size=58B
+WARNING 2026-05-27 22:34:01,767 pid=31 django.request:241  Unauthorized: /api/v1/predictions/iot-status/
+WARNING 2026-05-27 22:34:01,783 pid=31 middleware:34  GET /api/v1/notifications/read-all/ → 401 (2.2ms) user=- size=58B
+WARNING 2026-05-27 22:34:01,784 pid=31 django.request:241  Unauthorized: /api/v1/notifications/read-all/
+WARNING 2026-05-27 22:38:42,598 pid=31 middleware:34  GET /api/v1/auth/me/ → 401 (9.9ms) user=- size=183B
+WARNING 2026-05-27 22:38:42,601 pid=31 django.request:241  Unauthorized: /api/v1/auth/me/
+WARNING 2026-05-27 23:03:18,577 pid=31 middleware:34  POST /api/v1/auth/login/ → 401 (185.1ms) user=- size=63B
+WARNING 2026-05-27 23:03:18,580 pid=31 django.request:241  Unauthorized: /api/v1/auth/login/
+WARNING 2026-05-27 23:03:18,602 pid=31 middleware:34  GET /api/v1/predictions/iot-status/ → 401 (2.5ms) user=- size=183B
+WARNING 2026-05-27 23:03:18,603 pid=31 django.request:241  Unauthorized: /api/v1/predictions/iot-status/
+WARNING 2026-05-27 23:26:26,785 pid=31 middleware:34  GET /api/v1/notifications/unread/ → 401 (7.6ms) user=- size=183B
+WARNING 2026-05-27 23:26:26,788 pid=31 django.request:241  Unauthorized: /api/v1/notifications/unread/
+WARNING 2026-05-27 23:31:22,309 pid=31 middleware:34  POST /api/v1/notifications/138/read/ → 405 (20.2ms) user=1 size=41B
+WARNING 2026-05-27 23:31:22,311 pid=31 django.request:241  Method Not Allowed: /api/v1/notifications/138/read/
+WARNING 2026-05-28 00:26:45,991 pid=31 middleware:34  GET /api/v1/notifications/unread/ → 401 (12.8ms) user=- size=183B
+WARNING 2026-05-28 00:26:45,999 pid=31 django.request:241  Unauthorized: /api/v1/notifications/unread/
+WARNING 2026-05-28 01:30:48,129 pid=31 middleware:34  GET /api/v1/predictions/latest/ → 404 (17.8ms) user=1 size=32B
+WARNING 2026-05-28 01:30:48,135 pid=31 django.request:241  Not Found: /api/v1/predictions/latest/
+WARNING 2026-05-28 01:30:48,167 pid=31 middleware:34  GET /api/v1/predictions/latest/ → 404 (21.3ms) user=1 size=32B
+WARNING 2026-05-28 01:30:48,168 pid=31 django.request:241  Not Found: /api/v1/predictions/latest/
+WARNING 2026-05-28 01:30:49,729 pid=31 middleware:34  GET /api/v1/budget/ → 404 (15.1ms) user=1 size=34B
+WARNING 2026-05-28 01:30:49,731 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-05-28 01:30:49,758 pid=31 middleware:34  GET /api/v1/budget/ → 404 (14.8ms) user=1 size=34B
+WARNING 2026-05-28 01:30:49,766 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-05-28 01:44:31,519 pid=31 middleware:34  GET /api/v1/budget/ → 404 (26.5ms) user=1 size=34B
+WARNING 2026-05-28 01:44:31,522 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-05-28 01:44:31,560 pid=31 middleware:34  GET /api/v1/budget/ → 404 (23.6ms) user=1 size=34B
+WARNING 2026-05-28 01:44:31,565 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-05-28 01:44:32,893 pid=31 middleware:34  GET /api/v1/budget/ → 404 (40.5ms) user=1 size=34B
+WARNING 2026-05-28 01:44:32,895 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-05-28 01:44:32,922 pid=31 middleware:34  GET /api/v1/budget/ → 404 (11.0ms) user=1 size=34B
+WARNING 2026-05-28 01:44:32,925 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-05-28 01:49:23,834 pid=31 middleware:34  GET /api/v1/budget/ → 404 (28.1ms) user=1 size=34B
+WARNING 2026-05-28 01:49:23,840 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-05-28 01:49:23,867 pid=31 middleware:34  GET /api/v1/budget/ → 404 (16.7ms) user=1 size=34B
+WARNING 2026-05-28 01:49:23,868 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-05-28 01:49:24,848 pid=31 middleware:34  GET /api/v1/budget/ → 404 (37.7ms) user=1 size=34B
+WARNING 2026-05-28 01:49:24,852 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-05-28 01:49:24,876 pid=31 middleware:34  GET /api/v1/budget/ → 404 (12.6ms) user=1 size=34B
+WARNING 2026-05-28 01:49:24,882 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-05-28 01:50:54,537 pid=31 middleware:34  GET /api/v1/budget/ → 404 (18.2ms) user=1 size=34B
+WARNING 2026-05-28 01:50:54,541 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-05-28 01:50:54,572 pid=31 middleware:34  GET /api/v1/budget/ → 404 (15.0ms) user=1 size=34B
+WARNING 2026-05-28 01:50:54,574 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-05-28 01:50:55,145 pid=31 middleware:34  GET /api/v1/budget/ → 404 (20.4ms) user=1 size=34B
+WARNING 2026-05-28 01:50:55,149 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-05-28 01:50:55,176 pid=31 middleware:34  GET /api/v1/budget/ → 404 (13.4ms) user=1 size=34B
+WARNING 2026-05-28 01:50:55,180 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-05-28 02:04:42,933 pid=31 middleware:34  POST /api/v1/auth/login/ → 401 (191.9ms) user=- size=63B
+WARNING 2026-05-28 02:04:42,934 pid=31 django.request:241  Unauthorized: /api/v1/auth/login/

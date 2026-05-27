@@ -70,16 +70,25 @@ def run_ocr(gray: np.ndarray) -> list[str]:
     """
     Run all available engines on one preprocessed image.
     Returns a flat, deduplicated list of text tokens.
+
+    Both EasyOCR and Tesseract always run — they are independent models with
+    different failure modes.  EasyOCR struggles with backlit/pixelated phone-
+    screen text; Tesseract often recovers what EasyOCR misses, and vice versa.
+    Previously Tesseract only ran when EasyOCR returned nothing, but screen
+    photos always produce some EasyOCR output (status bar, browser chrome) even
+    when the bill reference number itself is not found.
     """
     lines: list[str] = []
 
     easy = ocr_easyocr(gray)
     lines.extend(easy)
 
-    # Add tesseract variants only if EasyOCR found nothing
-    if not easy:
-        for psm in (11, 6, 3):
-            lines.extend(ocr_tesseract(gray, psm))
+    # Always run Tesseract as a cross-checker regardless of EasyOCR output.
+    # psm 11 = sparse text  (best for mixed bill layouts)
+    # psm  6 = uniform block (helps when the ref-no region is clean)
+    # psm  3 = fully automatic (OSD) — general fallback
+    for psm in (11, 6, 3):
+        lines.extend(ocr_tesseract(gray, psm))
 
     # Deduplicate while preserving order
     seen: set[str] = set()

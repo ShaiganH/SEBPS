@@ -1,0 +1,70 @@
+# ── OS / editor ──────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ── Environment / secrets ─────────────────────────────────────────────────────
+.env
+!.env.example
+backend/.env
+!backend/.env.example
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+coverage.xml
+
+# ── Django ────────────────────────────────────────────────────────────────────
+backend/media/
+backend/staticfiles/
+backend/logs/
+*.sqlite3
+
+# ── Node / frontend ───────────────────────────────────────────────────────────
+node_modules/
+frontend/node_modules/
+mobile/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# ── Expo / React Native ───────────────────────────────────────────────────────
+mobile/.expo/
+mobile/android/
+mobile/ios/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+*.orig.*
+web-build/
+
+# ── Docker ────────────────────────────────────────────────────────────────────
+# (docker-compose.yml is intentionally tracked)
+
+# ── ML model cache ────────────────────────────────────────────────────────────
+.EasyOCR/
+*.h5
+*.pt
+*.pth
+*.pkl
+
+# ── Misc test / scratch images ────────────────────────────────────────────────
+module_2_ocr/*.jpeg
+module_2_ocr/*.jpg
+module_2_ocr/*.png
+inspect_*.png

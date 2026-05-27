@@ -122,9 +122,20 @@ def get_variants(source) -> list[tuple[str, np.ndarray]]:
     # ── Header crop (top 40%) — REF NO is always in the bill header ──────────
     # Cropping to just the header makes EasyOCR ~3× faster: 3 s → 1 s/call.
     # We try these FIRST so early-exit triggers quickly on clear images.
-    h_crop      = int(gray.shape[0] * 0.40)
-    header      = gray[:h_crop, :]
+    h_crop       = int(gray.shape[0] * 0.40)
+    header       = gray[:h_crop, :]
     hdr_contrast = _clahe(header)
+
+    # ── Mid-section crop (20–60%) ─────────────────────────────────────────────
+    # When users photograph a bill on a phone screen, the phone's status bar and
+    # browser address bar occupy the top ~15-20% of the image, pushing the bill
+    # header (which contains REF NO) into the mid-section.  The header-crop
+    # misses it because it grabs [0 → 40%] which is mostly browser chrome.
+    # A mid-section crop [20% → 60%] covers the bill header in those cases.
+    mid_top      = int(gray.shape[0] * 0.20)
+    mid_bot      = int(gray.shape[0] * 0.60)
+    mid          = gray[mid_top:mid_bot, :]
+    mid_contrast = _clahe(mid)
 
     # ── Full-image variants (fallback if header crop misses) ──────────────────
     contrast = _clahe(gray)
@@ -132,10 +143,13 @@ def get_variants(source) -> list[tuple[str, np.ndarray]]:
     denoised = _denoise(gray)
 
     variants: list[tuple[str, np.ndarray]] = [
-        # Header crops first — fast + most likely to contain the REF NO
+        # Header crops first — fast + most likely to contain REF NO on paper bills
         ('header_gray',    header),
         ('header_clahe',   hdr_contrast),
         ('header_otsu',    _binarize_otsu(hdr_contrast)),
+        # Mid-section crops — catches REF NO when browser chrome pushes it down
+        ('mid_gray',       mid),
+        ('mid_clahe',      mid_contrast),
         # Full image fallback
         ('original_gray',  gray),
         ('clahe',          contrast),

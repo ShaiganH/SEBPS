@@ -201,8 +201,10 @@ def extract_reference_number(
             'message': (
                 "Could not extract the reference number from this image.\n"
                 "Tips:\n"
-                "  • Make sure the bill is flat and well-lit.\n"
-                "  • Ensure the 'REF NO' area is fully visible.\n"
+                "  • Photograph the printed paper bill — not a phone/screen display.\n"
+                "    Screen photos contain status-bar and browser text that confuses OCR.\n"
+                "  • Make sure the bill is flat and well-lit with no glare.\n"
+                "  • Ensure the 'REF NO' section is fully visible and in focus.\n"
                 "  • Try a closer crop around the reference number.\n"
                 "Or enter the reference number manually."
             ),
