@@ -118,22 +118,24 @@ class SmartRecommendationView(APIView):
         predicted_bill  = float(prediction.predicted_bill)
         predicted_units = prediction.predicted_units
 
-        # ── IoT actual consumption ─────────────────────────────────────────────
-        from services.iot_service import get_iot_consumption
-        iot = get_iot_consumption(user, days=30)
-        iot_consumed_pkr = iot["cost_pkr"]   if iot["has_data"] else 0.0
-        iot_consumed_kwh = iot["units_kwh"]  if iot["has_data"] else 0.0
-
-        # ── Billing-cycle context (remaining days) ────────────────────────────
+        # ── IoT actual consumption (LAG-delta — handles session resets correctly) ─
+        # get_iot_consumption() uses Max−Min which under-counts when the device
+        # resets its cumulative counter mid-cycle.  _get_iot_context() sums positive
+        # per-reading deltas, identical to the prediction engine.
         from apps.predictions.views import _get_iot_context
         iot_ctx       = _get_iot_context(user)
+        iot_has_data  = iot_ctx["has_iot"]
+        iot_consumed_pkr = iot_ctx["current_bill_pkr"] if iot_has_data else 0.0
+        iot_consumed_kwh = iot_ctx["measured_kwh"]     if iot_has_data else 0.0
+
+        # ── Billing-cycle context (remaining days) ────────────────────────────
         remaining_days = max(1, iot_ctx["total_cycle_days"] - iot_ctx["days_elapsed"]) \
-                         if iot_ctx["has_iot"] else 30
+                         if iot_has_data else 30
 
         # ── RIGHT MENTAL MODEL ────────────────────────────────────────────────
         # Progress bar / situation = IoT actual (what has been spent, a fact)
         # Projection warning        = prediction (shown as a secondary badge)
-        if iot["has_data"] and budget_pkr > 0:
+        if iot_has_data and budget_pkr > 0:
             pct_used = round(iot_consumed_pkr / budget_pkr * 100, 1)
         elif budget_pkr > 0:
             pct_used = round(predicted_bill / budget_pkr * 100, 1)
@@ -246,7 +248,7 @@ class SmartRecommendationView(APIView):
             # Build an honest situation string for the AI
             spent_str = (
                 f"I've spent Rs {iot_consumed_pkr:,.0f} ({iot_consumed_kwh:.2f} kWh, {pct_used:.1f}% of my Rs {budget_pkr:,.0f} budget) this billing cycle so far."
-                if iot["has_data"] else
+                if iot_has_data else
                 f"My predicted bill is Rs {predicted_bill:,.0f} ({pct_used:.1f}% of my Rs {budget_pkr:,.0f} budget)."
             )
             proj_str = (
@@ -300,7 +302,7 @@ class SmartRecommendationView(APIView):
                     "iot_cost_pkr":  round(iot_consumed_pkr, 2),
                     "iot_units_kwh": round(iot_consumed_kwh, 2),
                     "iot_pct":       pct_used,           # same as pct_used
-                    "has_iot":       iot["has_data"],
+                    "has_iot":       iot_has_data,
                     "remaining_budget_pkr": round(remaining_budget_pkr, 2),
                     # ── Projection warning (secondary) ─────────────────────
                     "predicted_bill_pkr":         round(predicted_bill, 2),

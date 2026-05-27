@@ -163,7 +163,18 @@ def _get_iot_context(user):
         daily_rate = (measured_kwh / ctx["iot_runtime_hours"]) * 24
 
     ctx["iot_daily_rate_kwh"] = round(daily_rate, 4)
-    ctx["units_so_far"] = round(daily_rate * days_elapsed, 4)
+
+    # ── Projected end-of-month total ─────────────────────────────────────────
+    # CORRECT formula:
+    #   measured_kwh          — what the meter has actually accumulated (fact)
+    #   daily_rate × remaining — what it will accumulate at the current rate
+    #
+    # The OLD formula (daily_rate × days_elapsed) is wrong whenever the load
+    # changed mid-cycle: e.g. 26 days at 100 kW then 1 day at 51 W → the
+    # 2-hour window gives 1.2 kWh/day, so "units_so_far" = 1.2 × 27 = 33 kWh,
+    # completely ignoring the 32 124 kWh already on the meter.
+    remaining_days = max(0, total_cycle_days - days_elapsed)
+    ctx["units_so_far"] = round(measured_kwh + daily_rate * remaining_days, 4)
 
     # Bill for actual measured kWh consumed so far this cycle
     if ctx["has_iot"] and ctx["measured_kwh"] > 0:
@@ -211,6 +222,21 @@ class GeneratePredictionView(APIView):
         days_elapsed     = data.get("days_elapsed",     iot_ctx["days_elapsed"])
         total_cycle_days = data.get("total_cycle_days", iot_ctx["total_cycle_days"])
 
+        # ── IoT anti-double-extrapolation fix ────────────────────────────────
+        # units_so_far is now (measured_kwh + daily_rate × remaining_days) —
+        # a complete end-of-month projection, not a "so far" reading.
+        # daily_projection() does: (units_so_far / days_elapsed) × total_cycle_days
+        # If days_elapsed < total_cycle_days it re-extrapolates, inflating the
+        # result.  Setting pred_days_elapsed = total_cycle_days makes it a no-op:
+        #   (projected_total / 31) × 31 = projected_total  ✓
+        # We keep the real days_elapsed for the DB record (display only).
+        pred_days_elapsed = (
+            total_cycle_days
+            if (iot_ctx["has_iot"] and iot_ctx["measured_kwh"] > 0
+                and "days_elapsed" not in data)   # only when auto-populated
+            else days_elapsed
+        )
+
         # Merge user profile with any manual overrides from request
         bill_kwargs = {
             "sanctioned_load_kw": data.get("sanctioned_load_kw", user.sanctioned_load_kw),
@@ -224,7 +250,7 @@ class GeneratePredictionView(APIView):
         result = run_prediction(
             history_units=history_units,
             units_so_far=round(float(units_so_far), 3),
-            days_elapsed=int(days_elapsed),
+            days_elapsed=int(pred_days_elapsed),   # adjusted to prevent re-extrapolation
             total_cycle_days=int(total_cycle_days),
             **bill_kwargs,
         )
@@ -232,7 +258,7 @@ class GeneratePredictionView(APIView):
         prediction = Prediction.objects.create(
             user=user,
             units_so_far=round(float(units_so_far), 3),
-            days_elapsed=int(days_elapsed),
+            days_elapsed=int(days_elapsed),         # actual days, for display
             total_cycle_days=int(total_cycle_days),
             fpa_per_unit=bill_kwargs["fpa_per_unit"],
             qta_per_unit=bill_kwargs["qta_per_unit"],

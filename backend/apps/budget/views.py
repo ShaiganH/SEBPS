@@ -68,7 +68,7 @@ def _build_budget_status(budget, user):
 
 
 class BudgetView(APIView):
-    """GET → retrieve; POST → create/update (upsert)."""
+    """GET → retrieve; POST → create/update (upsert); DELETE → remove."""
 
     def get(self, request):
         try:
@@ -76,6 +76,13 @@ class BudgetView(APIView):
         except Budget.DoesNotExist:
             return Response({"detail": "No budget configured."}, status=status.HTTP_404_NOT_FOUND)
         return Response(_build_budget_status(budget, request.user))
+
+    def delete(self, request):
+        try:
+            request.user.budget.delete()
+        except Budget.DoesNotExist:
+            return Response({"detail": "No budget found."}, status=status.HTTP_404_NOT_FOUND)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     def post(self, request):
         serializer = BudgetSerializer(data=request.data)
