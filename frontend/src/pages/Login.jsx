@@ -142,7 +142,7 @@ export default function Login() {
               </div>
             </div>
 
-            <button type="submit" disabled={busy} className="btn-primary w-full mt-2 py-3">
+            <button type="submit" disabled={busy} className="bg-blue-50 text-black border border-slate-200 hover:bg-black hover:text-white rounded-md transition hover:border-black w-full mt-2 py-3">
               {busy ? (
                 <span className="flex items-center justify-center gap-2">
                   <span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" />

@@ -184,11 +184,7 @@ export default function Recommendations() {
           <p className="text-slate-500 text-sm mt-1">Personalised advice to reduce your electricity bill</p>
         </div>
         <div className="flex gap-2">
-          <button onClick={generate} disabled={genning}
-            className="btn-secondary flex items-center gap-1.5 text-xs px-3.5 py-2">
-            <Lightbulb size={13} className="text-slate-500" />
-            {genning ? 'Generating…' : 'Rule-Based'}
-          </button>
+          
           <button onClick={getSmart} disabled={smartLoading}
             className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-medium bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white transition-colors">
             <Star size={13} />
@@ -385,135 +381,14 @@ export default function Recommendations() {
               className="input flex-1"
             />
             <button onClick={() => sendChat()} disabled={chatLoading || !chatInput.trim()}
-              className="w-10 h-10 rounded-xl bg-violet-600 hover:bg-violet-700 disabled:opacity-40 text-white flex items-center justify-center transition-colors flex-shrink-0">
+              className="w-10 h-10 rounded-sm bg-violet-600 hover:bg-violet-700 disabled:opacity-40 text-white flex items-center justify-center transition-colors flex-shrink-0">
               <Send size={15} />
             </button>
           </div>
         </div>
       )}
 
-      {/* Saved history */}
-      {recs.length > 0 && (
-        <div className="surface overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-100">
-            <p className="font-semibold text-slate-900 text-sm">Saved Recommendations</p>
-          </div>
-          <div className="divide-y divide-slate-50">
-            {recs.map(rec => (
-              <div key={rec.id}>
-                <button
-                  onClick={() => setExpanded(expanded === rec.id ? null : rec.id)}
-                  className="w-full flex items-center justify-between px-6 py-4 hover:bg-slate-50/50 transition-colors"
-                >
-                  <div className="flex items-center gap-3">
-                    <span className={`w-2 h-2 rounded-full flex-shrink-0 ${rec.within_budget ? 'bg-emerald-500' : 'bg-red-500'}`} />
-                    <span className={`text-xs font-medium ${rec.within_budget ? 'text-emerald-600' : 'text-red-600'}`}>
-                      {rec.within_budget ? 'Within Budget' : 'Over Budget'}
-                    </span>
-                    <span className="text-sm text-slate-700">
-                      {rec.predicted_units} units · Rs {Number(rec.predicted_bill_pkr).toLocaleString()}
-                    </span>
-                    {rec.pkr_gap > 0 && (
-                      <span className="text-xs text-red-500">Gap: Rs {Number(rec.pkr_gap).toLocaleString()}</span>
-                    )}
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs text-slate-400">{new Date(rec.created_at).toLocaleDateString()}</span>
-                    {expanded === rec.id ? <ChevronUp size={14} className="text-slate-400" /> : <ChevronDown size={14} className="text-slate-400" />}
-                  </div>
-                </button>
 
-                {expanded === rec.id && (
-                  <div className="px-6 pb-5 bg-slate-50/50">
-                    {rec.analysis?.appliance_breakdown?.length > 0 && (
-                      <div className="mb-4">
-                        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2.5">Appliance Breakdown</p>
-                        <div className="space-y-1.5">
-                          {rec.analysis.appliance_breakdown.slice(0, 5).map(a => (
-                            <div key={a.name} className="flex items-center justify-between text-xs bg-white border border-slate-100 rounded-xl px-3.5 py-2.5">
-                              <span className="font-medium text-slate-800">{a.name}</span>
-                              <div className="flex gap-4 text-slate-500">
-                                <span>{a.monthly_units} kWh</span>
-                                <span className="text-amber-600">Rs {Number(a.bill_drop_per_1hr).toLocaleString()}/hr cut</span>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-
-                    {rec.analysis?.appliance_breakdown?.length > 0 && !rec.applied && (
-                      <div className="mb-4">
-                        <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-2.5">Apply Hour Reductions</p>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-3">
-                          {rec.analysis.appliance_breakdown.filter(a => a.bill_drop_per_1hr > 0).slice(0, 6).map(a => (
-                            <div key={a.name}>
-                              <label className="label truncate">{a.name}</label>
-                              <p className="text-[10px] text-amber-600 mb-1">saves Rs {Number(a.bill_drop_per_1hr).toLocaleString()}/hr</p>
-                              <input type="number" min="0" max="24" step="0.5" placeholder="hrs to cut"
-                                value={applyForm[rec.id]?.[a.name] || ''}
-                                onChange={e => setApplyForm(p => ({ ...p, [rec.id]: { ...(p[rec.id] || {}), [a.name]: e.target.value } }))}
-                                className="input text-xs py-2"
-                              />
-                            </div>
-                          ))}
-                        </div>
-                        <button onClick={() => applyReductions(rec.id)} disabled={applying === rec.id}
-                          className="btn-primary text-xs px-4 py-2">
-                          {applying === rec.id ? 'Computing…' : 'Calculate Savings'}
-                        </button>
-                      </div>
-                    )}
-
-                    {(() => {
-                      const r = applyResults[rec.id] ?? (rec.applied && rec.reductions?.length ? { steps: rec.reductions } : null)
-                      if (!r) return null
-                      const steps      = r.steps ?? []
-                      const newBill    = r.final_bill ?? steps.at(-1)?.new_bill ?? steps.at(-1)?.new_bill_pkr
-                      const totalSaved = r.total_pkr_saved ?? (newBill != null ? rec.predicted_bill_pkr - newBill : null)
-                      return (
-                        <div className="surface overflow-hidden border-emerald-100">
-                          <div className="flex items-center justify-between px-5 py-4 bg-emerald-50">
-                            <div>
-                              <p className="text-xs text-slate-500">New projected bill</p>
-                              <p className="text-xl font-bold text-emerald-700">Rs {newBill != null ? Number(newBill).toLocaleString() : '—'}</p>
-                            </div>
-                            <div className="text-right">
-                              <p className="text-xs text-slate-500">You save</p>
-                              <p className="text-xl font-bold text-amber-600">Rs {totalSaved != null ? Number(totalSaved).toLocaleString() : '—'}</p>
-                            </div>
-                          </div>
-                          {steps.length > 0 && (
-                            <div className="divide-y divide-slate-50">
-                              {steps.map((s, i) => (
-                                <div key={i} className="flex items-center justify-between px-5 py-3 text-xs">
-                                  <div className="flex items-center gap-2">
-                                    <span className="font-medium text-slate-800">{s.appliance ?? s.appliance_name}</span>
-                                    <span className="text-slate-400">−{s.hours_reduced}hr/day</span>
-                                    {s.slab_crossed && (
-                                      <span className="px-1.5 py-0.5 bg-blue-50 text-blue-600 border border-blue-100 rounded text-[10px]">slab drop</span>
-                                    )}
-                                  </div>
-                                  <div className="flex gap-4">
-                                    <span className="text-slate-400">−{s.units_saved} kWh</span>
-                                    <span className="text-emerald-600 font-semibold">
-                                      Rs {Number(s.money_saved_step ?? s.pkr_saved ?? 0).toLocaleString()} saved
-                                    </span>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          )}
-                        </div>
-                      )
-                    })()}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
 
       {recs.length === 0 && !smart && !smartLoading && (
         <div className="surface p-6">

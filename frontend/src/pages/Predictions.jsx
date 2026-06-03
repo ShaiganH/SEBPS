@@ -167,7 +167,7 @@ export default function Predictions() {
               )}
               <button
                 onClick={() => generate(false)} disabled={generating}
-                className="btn-primary w-full flex items-center justify-center gap-2 py-3 text-sm"
+                className="bg-white text-[#8B5CF6] rounded-sm border border-slate-200 w-full flex items-center justify-center gap-2 py-3 text-sm hover:bg-[#8B5CF6] hover:border-[#8B5CF6] hover:text-white transition-colors duration-200"
               >
                 {generating ? (
                   <><span className="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin" /> Generating…</>
@@ -287,51 +287,61 @@ export default function Predictions() {
       </div>
 
       {/* ── Billing Cycle Status tiles ────────────────────────────────────── */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {[
-          {
-            label: 'Consumed (IoT)',
-            value: iotStatus?.measured_kwh != null ? `${iotStatus.measured_kwh.toFixed(2)} kWh` : '—',
-            sub:   iotStatus?.current_bill_pkr > 0
-              ? `Rs ${Number(iotStatus.current_bill_pkr).toLocaleString()} est.`
-              : 'this cycle',
-            icon: Zap, iconBg: 'bg-amber-50', iconColor: 'text-amber-600',
-          },
-          {
-            label: 'Days Elapsed',
-            value: iotStatus ? `${iotStatus.days_elapsed}` : '—',
-            sub:   iotStatus ? `of ${iotStatus.total_cycle_days} days` : 'no cycle data',
-            icon: Activity, iconBg: 'bg-blue-50', iconColor: 'text-blue-600',
-          },
-          {
-            label: 'Daily Rate',
-            value: iotStatus?.iot_daily_rate_kwh != null
-              ? `${iotStatus.iot_daily_rate_kwh.toFixed(2)} kWh`
-              : '—',
-            sub:   'last 2-hour window',
-            icon: Cpu, iconBg: 'bg-emerald-50', iconColor: 'text-emerald-600',
-          },
-          {
-            label: 'Last Predicted',
-            value: iotStatus?.last_prediction_at ? timeAgo(iotStatus.last_prediction_at) : '—',
-            sub:   iotStatus?.last_prediction_at
-              ? new Date(iotStatus.last_prediction_at).toLocaleTimeString('en-PK', { hour: '2-digit', minute: '2-digit' })
-              : 'never',
-            icon: TrendingUp, iconBg: 'bg-violet-50', iconColor: 'text-violet-600',
-          },
-        ].map(({ label, value, sub, icon: Icon, iconBg, iconColor }) => (
-          <div key={label} className="surface p-4 flex items-center gap-3.5">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${iconBg}`}>
-              <Icon size={17} className={iconColor} />
-            </div>
-            <div className="min-w-0">
-              <p className="text-xs text-slate-400 truncate">{label}</p>
-              <p className="text-lg font-bold text-slate-900 leading-snug">{value}</p>
-              <p className="text-xs text-slate-400 truncate">{sub}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+{/* ── Billing Cycle Status tiles ────────────────────────────────────── */}
+<div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+
+  <div className="surface p-4 flex flex-col justify-between">
+    <p className="text-xs text-slate-400 uppercase tracking-widest">Consumed (IoT)</p>
+    <p className="text-xl font-bold text-slate-900 mt-2">
+      {iotStatus?.measured_kwh != null ? `${iotStatus.measured_kwh.toFixed(2)} kWh` : '—'}
+    </p>
+    <p className="text-xs text-slate-500 mt-1">
+      {iotStatus?.current_bill_pkr > 0
+        ? `Rs ${Number(iotStatus.current_bill_pkr).toLocaleString()} est.`
+        : 'this cycle'}
+    </p>
+  </div>
+
+  <div className="surface p-4 flex flex-col justify-between">
+    <p className="text-xs text-slate-400 uppercase tracking-widest">Days Elapsed</p>
+    <p className="text-xl font-bold text-slate-900 mt-2">
+      {iotStatus ? `${iotStatus.days_elapsed}` : '—'}
+    </p>
+    <p className="text-xs text-slate-500 mt-1">
+      {iotStatus ? `of ${iotStatus.total_cycle_days} days` : 'no cycle data'}
+    </p>
+  </div>
+
+  <div className="surface p-4 flex flex-col justify-between">
+    <p className="text-xs text-slate-400 uppercase tracking-widest">Daily Rate</p>
+    <p className="text-xl font-bold text-slate-900 mt-2">
+      {iotStatus?.iot_daily_rate_kwh != null
+        ? `${iotStatus.iot_daily_rate_kwh.toFixed(2)} kWh`
+        : '—'}
+    </p>
+    <p className="text-xs text-slate-500 mt-1">
+      last 2-hour window
+    </p>
+  </div>
+
+  <div className="surface p-4 flex flex-col justify-between">
+    <p className="text-xs text-slate-400 uppercase tracking-widest">Last Predicted</p>
+    <p className="text-sm font-semibold text-slate-900 mt-2">
+      {iotStatus?.last_prediction_at
+        ? timeAgo(iotStatus.last_prediction_at)
+        : '—'}
+    </p>
+    <p className="text-xs text-slate-500 mt-1">
+      {iotStatus?.last_prediction_at
+        ? new Date(iotStatus.last_prediction_at).toLocaleTimeString('en-PK', {
+            hour: '2-digit',
+            minute: '2-digit'
+          })
+        : 'never'}
+    </p>
+  </div>
+
+</div>
 
       {/* IoT rate info banner */}
       {iotStatus?.has_iot && iotStatus.iot_runtime_hours > 0 && (

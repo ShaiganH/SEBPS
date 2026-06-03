@@ -193,12 +193,12 @@ export default function Appliances() {
           {!optimizeMode && (
             <>
               <button onClick={analyze} disabled={analyzing || appliances.length === 0}
-                className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-medium bg-violet-600 hover:bg-violet-700 disabled:opacity-50 text-white transition-colors">
+                className="flex items-center gap-1.5 px-2 py-1 rounded-md text-sm text-black border border-slate-200 font-small bg-white hover:bg-violet-700 disabled:opacity-50 hover:text-white hover:border-violet-700 transition-colors">
                 <BarChart2 size={14} />{analyzing ? ' Analyzing…' : ' Analyze'}
               </button>
               {!budgetExceeded && (
                 <button onClick={runOptimize} disabled={optimizing || appliances.length === 0}
-                  className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-medium bg-amber-500 hover:bg-amber-600 disabled:opacity-50 text-white transition-colors">
+                  className="flex items-center gap-1.5 px-2 py-1 rounded-md text-sm  bg-white border border-slate-200 hover:bg-amber-600 hover:text-white hover:border-amber-600 disabled:opacity-50 text-black transition-colors">
                   <Settings size={14} />{optimizing ? ' Optimizing…' : ' Optimize'}
                 </button>
               )}
@@ -210,10 +210,12 @@ export default function Appliances() {
               <X size={14} /> Exit Optimization
             </button>
           )}
-          <button onClick={() => setShowAdd(p => !p)}
-            className={showAdd ? 'btn-secondary flex items-center gap-1.5 text-sm' : 'btn-primary flex items-center gap-1.5'}>
-            {showAdd ? <><X size={14} /> Cancel</> : <><Plus size={14} /> Add Appliance</>}
-          </button>
+          <button
+  onClick={() => setShowAdd(p => !p)}
+  className="w-10 h-10 flex items-center justify-center rounded-full border border-slate-200 bg-white text-black hover:bg-black hover:text-white transition-colors"
+>
+  {showAdd ? <X size={14} /> : <Plus size={14} />}
+</button>
         </div>
       </div>
 

@@ -7,6 +7,7 @@ export function AuthProvider({ children }) {
   const [user,            setUser]            = useState(null)
   const [loading,         setLoading]         = useState(true)
   const [needsOnboarding, setNeedsOnboarding] = useState(false)
+  const [refreshSignal,   setRefreshSignal]   = useState(0)
 
   useEffect(() => {
     const token = localStorage.getItem('access')
@@ -59,12 +60,14 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('show_onboarding')
     localStorage.setItem('welcome_message', '1')
     setNeedsOnboarding(false)
+    setRefreshSignal(s => s + 1)   // trigger Dashboard re-fetch
   }
 
   return (
     <AuthContext.Provider value={{
       user, loading, login, register, logout, refreshUser,
       needsOnboarding, setNeedsOnboarding, completeOnboarding,
+      refreshSignal,
     }}>
       {children}
     </AuthContext.Provider>

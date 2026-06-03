@@ -279,7 +279,7 @@ export default function Bills() {
           />
           <button
             onClick={triggerFetch} disabled={fetching || !refNo.trim()}
-            className="btn-primary flex items-center gap-2 flex-shrink-0 px-5"
+            className="bg-white text-black border border-slate-200 flex items-center gap-2 flex-shrink-0 px-5 hover:bg-black hover:text-white transition-colors duration-200"
           >
             {fetching
               ? <><Loader size={14} className="animate-spin" /> Fetching…</>
@@ -312,10 +312,10 @@ export default function Bills() {
           <button
             onClick={() => setShowManual(p => !p)}
             className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-medium transition-colors ${
-              showManual ? 'bg-slate-100 text-slate-600' : 'bg-blue-600 text-white hover:bg-blue-700'
+              showManual ? 'bg-slate-100 text-slate-600' : 'bg-white text-black border border-slate-200 hover:bg-black hover:border-[#8B5CF6] hover:text-white'
             }`}
           >
-            {showManual ? <><X size={14} /> Cancel</> : <><Plus size={14} /> Add Manual</>}
+            {showManual ? <><X size={14} /> Cancel</> : <> Add</>}
           </button>
         </div>
 

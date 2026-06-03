@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { toast } from '../lib/toast'
 import api from '../api/client'
 import {
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer,
@@ -49,6 +50,18 @@ export default function Budget() {
     ]).then(([b, a, h]) => {
       const bd = b.data?.detail ? null : b.data
       setBudget(bd); setAlerts(a.data); setHistory(h.data)
+      // Re-fire budget alert toast whenever projected amount changes
+      if (bd?.projection_exceeds_budget && bd?.projected_bill_pkr != null) {
+        const key = `budget_over_${Math.round(bd.projected_bill_pkr)}`
+        if (!sessionStorage.getItem(key)) {
+          sessionStorage.setItem(key, '1')
+          toast.warning(
+            `Projected Rs ${Number(bd.projected_bill_pkr).toLocaleString()} — ` +
+            `Rs ${Number(bd.projected_over_by_pkr).toLocaleString()} over your budget`,
+            { duration: 8000 }
+          )
+        }
+      }
       if (bd) setForm({
         max_pkr: bd.max_pkr, max_units: bd.max_units || '',
         alert_at_75_pct: bd.alert_at_75_pct, alert_at_100_pct: bd.alert_at_100_pct,
@@ -72,9 +85,12 @@ export default function Budget() {
         alert_at_75_pct:  form.alert_at_75_pct,
         alert_at_100_pct: form.alert_at_100_pct,
       })
+      toast.success('Budget saved')
       setMsg('Budget saved successfully.'); setMsgOk(true); load()
     } catch (err) {
-      setMsg(err.response?.data?.detail || 'Save failed'); setMsgOk(false)
+      const msg = err.response?.data?.detail || 'Save failed'
+      toast.error(msg)
+      setMsg(msg); setMsgOk(false)
     } finally { setSaving(false) }
   }
 
@@ -326,7 +342,7 @@ export default function Budget() {
           </div>
         )}
 
-        <button onClick={save} disabled={saving || !form.max_pkr} className="btn-primary px-6">
+        <button onClick={save} disabled={saving || !form.max_pkr} className="bg-white text-black border border-slate-200 px-6 hover:bg-black hover:border-black py-1 rounded-sm hover:text-white transition-colors duration-200">
           {saving ? 'Saving…' : 'Save Budget'}
         </button>
       </div>

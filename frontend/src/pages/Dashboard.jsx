@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
+import { toast } from '../lib/toast'
 import api from '../api/client'
+import { useAuth } from '../context/AuthContext'
 import {
   AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
 } from 'recharts'
@@ -34,8 +36,9 @@ const CustomTooltip = ({ active, payload, label }) => {
 }
 
 export default function Dashboard() {
-  const [data,       setData]       = useState(null)
-  const [loading,    setLoading]    = useState(true)
+  const { refreshSignal } = useAuth()
+  const [data,        setData]        = useState(null)
+  const [loading,     setLoading]     = useState(true)
   const [showWelcome, setShowWelcome] = useState(() => {
     if (localStorage.getItem('welcome_message') === '1') {
       localStorage.removeItem('welcome_message')
@@ -45,11 +48,28 @@ export default function Dashboard() {
   })
 
   useEffect(() => {
+    setLoading(true)
     api.get('/auth/dashboard/')
-      .then(r => setData(r.data))
+      .then(r => {
+        setData(r.data)
+        // Budget-exceeded toast — keyed to the projected amount so it fires
+        // again if the projection rises further (not once-per-session).
+        const b = r.data?.budget
+        if (b?.projection_exceeds_budget && b?.projected_bill_pkr != null) {
+          const key = `budget_over_${Math.round(b.projected_bill_pkr)}`
+          if (!sessionStorage.getItem(key)) {
+            sessionStorage.setItem(key, '1')
+            toast.warning(
+              `Budget alert — projected Rs ${Number(b.projected_bill_pkr).toLocaleString()},` +
+              ` Rs ${Number(b.projected_over_by_pkr).toLocaleString()} over limit`,
+              { duration: 8000 }
+            )
+          }
+        }
+      })
       .catch(console.error)
       .finally(() => setLoading(false))
-  }, [])
+  }, [refreshSignal])
 
   if (loading) return <Spinner />
 
@@ -289,53 +309,59 @@ export default function Dashboard() {
       </div>
 
       {/* ── KPI tiles ────────────────────────────────────────────────────── */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {[
-          {
-            label:     'Monthly Budget',
-            value:     budget ? `Rs ${Number(budget.max_pkr).toLocaleString()}` : '—',
-            sub:       pct !== null ? `${pct}% consumed` : 'Not configured',
-            icon:      Wallet,
-            iconBg:    'bg-blue-50',
-            iconColor: 'text-blue-600',
-          },
-          {
-            label:     'IoT Devices',
-            value:     iot ? `${iot.active_devices}` : '—',
-            sub:       iot?.latest_reading ? `${iot.latest_reading.power?.toFixed(0)} W live` : 'No IoT data',
-            icon:      Cpu,
-            iconBg:    'bg-emerald-50',
-            iconColor: 'text-emerald-600',
-          },
-          {
-            label:     'This Cycle',
-            value:     iotCycle ? `${iotCycle.measured_kwh?.toFixed(1)} kWh` : '—',
-            sub:       iotCycle ? `Day ${iotCycle.days_elapsed} of ${iotCycle.total_cycle_days}` : 'No cycle data',
-            icon:      Zap,
-            iconBg:    'bg-amber-50',
-            iconColor: 'text-amber-600',
-          },
-          {
-            label:     'Notifications',
-            value:     `${unread}`,
-            sub:       unread > 0 ? 'unread alerts' : 'All caught up',
-            icon:      Bell,
-            iconBg:    unread > 0 ? 'bg-red-50'    : 'bg-slate-50',
-            iconColor: unread > 0 ? 'text-red-500' : 'text-slate-400',
-          },
-        ].map(({ label, value, sub, icon: Icon, iconBg, iconColor }) => (
-          <div key={label} className="surface p-4 flex items-center gap-3.5">
-            <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${iconBg}`}>
-              <Icon size={17} className={iconColor} />
-            </div>
-            <div className="min-w-0">
-              <p className="text-xs text-slate-400 truncate">{label}</p>
-              <p className="text-lg font-bold text-slate-900 leading-snug">{value}</p>
-              <p className="text-xs text-slate-400 truncate">{sub}</p>
-            </div>
-          </div>
-        ))}
-      </div>
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+
+  {/* Budget - emphasized */}
+  <div className="surface p-4 flex flex-col justify-between">
+    <p className="text-xs text-slate-400 uppercase tracking-widest">Monthly Budget</p>
+    <p className="text-2xl font-bold text-slate-900 mt-2">
+      {budget ? `Rs ${Number(budget.max_pkr).toLocaleString()}` : '—'}
+    </p>
+    <p className="text-xs text-slate-500 mt-1">
+      {pct !== null ? `${pct}% consumed` : 'Not configured yet'}
+    </p>
+  </div>
+
+  {/* IoT */}
+  <div className="surface p-4 flex flex-col justify-between">
+    <p className="text-xs text-slate-400 uppercase tracking-widest">IoT</p>
+    <p className="text-xl font-bold text-slate-900 mt-2">
+      {iot ? `${iot.active_devices}` : '—'}
+    </p>
+    <p className="text-xs text-slate-500 mt-1">
+      {iot?.latest_reading
+        ? `${iot.latest_reading.power?.toFixed(0)} W live`
+        : 'No data'}
+    </p>
+  </div>
+
+  {/* Cycle - visually different */}
+  <div className="surface p-4 bg-slate-50 flex flex-col justify-between border-slate-200">
+    <p className="text-xs text-slate-400 uppercase tracking-widest">Current Cycle</p>
+    <p className="text-xl font-bold text-slate-900 mt-2">
+      {iotCycle ? `${iotCycle.measured_kwh?.toFixed(1)} kWh` : '—'}
+    </p>
+    <p className="text-xs text-slate-500 mt-1">
+      {iotCycle
+        ? `Day ${iotCycle.days_elapsed} / ${iotCycle.total_cycle_days}`
+        : 'No cycle data'}
+    </p>
+  </div>
+
+  {/* Notifications - slightly alert style */}
+  <div className={`surface p-4 flex flex-col justify-between ${
+    unread > 0 ? 'border-red-200 bg-red-50/30' : ''
+  }`}>
+    <p className="text-xs text-slate-400 uppercase tracking-widest">Notifications</p>
+    <p className={`text-xl font-bold mt-2 ${unread > 0 ? 'text-red-600' : 'text-slate-900'}`}>
+      {unread}
+    </p>
+    <p className="text-xs text-slate-500 mt-1">
+      {unread > 0 ? 'Unread alerts' : 'All caught up'}
+    </p>
+  </div>
+
+</div>
 
       {/* ── Recent bills + Quick actions ─────────────────────────────────── */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

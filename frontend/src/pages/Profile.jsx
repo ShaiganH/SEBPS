@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { toast } from '../lib/toast'
 import api from '../api/client'
 import { useAuth } from '../context/AuthContext'
 import { User, Zap, Lock, CheckCircle2, AlertTriangle, ScanLine, LogOut } from 'lucide-react'
@@ -23,7 +24,7 @@ const SectionCard = ({ icon: Icon, title, iconBg = 'bg-blue-50', iconColor = 'te
 )
 
 const StatusMsg = ({ ok, msg }) => msg ? (
-  <div className={`flex items-center gap-2 text-sm px-3.5 py-2.5 rounded-xl mt-4 ${
+  <div className={`flex items-center gap-2 text-sm px-3.5 py-2.5 rounded-md mt-4 ${
     ok ? 'bg-emerald-50 text-emerald-700' : 'bg-red-50 text-red-600'
   }`}>
     {ok ? <CheckCircle2 size={14} /> : <AlertTriangle size={14} />}
@@ -79,10 +80,11 @@ export default function Profile() {
     try {
       await api.patch('/auth/me/', personal)
       setPMsg('Personal info updated.'); setPOk(true)
+      toast.success('Personal info updated')
       if (refreshUser) refreshUser()
     } catch (e) {
-      setPMsg(e.response?.data?.detail || JSON.stringify(e.response?.data) || 'Save failed')
-      setPOk(false)
+      const msg = e.response?.data?.detail || JSON.stringify(e.response?.data) || 'Save failed'
+      setPMsg(msg); setPOk(false); toast.error(msg)
     } finally { setPSaving(false) }
   }
 
@@ -96,24 +98,28 @@ export default function Profile() {
         phase:              lesco.phase,
       })
       setLMsg('Meter settings saved.'); setLOk(true)
+      toast.success('Meter settings saved')
     } catch (e) {
-      setLMsg(e.response?.data?.detail || JSON.stringify(e.response?.data) || 'Save failed')
-      setLOk(false)
+      const msg = e.response?.data?.detail || JSON.stringify(e.response?.data) || 'Save failed'
+      setLMsg(msg); setLOk(false); toast.error(msg)
     } finally { setLSaving(false) }
   }
 
   const changePassword = async () => {
     if (pwd.new_password !== pwd.new_password2) {
-      setCMsg('New passwords do not match.'); setCOk(false); return
+      setCMsg('New passwords do not match.'); setCOk(false)
+      toast.error('New passwords do not match')
+      return
     }
     setCSaving(true); setCMsg('')
     try {
       await api.post('/auth/change-password/', pwd)
       setCMsg('Password changed successfully.'); setCOk(true)
+      toast.success('Password changed')
       setPwd({ old_password: '', new_password: '', new_password2: '' })
     } catch (e) {
-      setCMsg(e.response?.data?.old_password?.[0] || e.response?.data?.detail || 'Change failed')
-      setCOk(false)
+      const msg = e.response?.data?.old_password?.[0] || e.response?.data?.detail || 'Change failed'
+      setCMsg(msg); setCOk(false); toast.error(msg)
     } finally { setCSaving(false) }
   }
 
@@ -165,7 +171,7 @@ export default function Profile() {
             className="input bg-slate-50 cursor-not-allowed"
           />
         </div>
-        <button onClick={savePersonal} disabled={pSaving} className="btn-primary px-6">
+        <button onClick={savePersonal} disabled={pSaving} className="bg-white text-black border border-slate-200 rounded-md py-1 hover:bg-black hover:text-white hover:border-black px-6">
           {pSaving ? 'Saving…' : 'Save Personal Info'}
         </button>
         <StatusMsg ok={pOk} msg={pMsg} />
@@ -213,7 +219,7 @@ export default function Profile() {
             </select>
           </div>
         </div>
-        <button onClick={saveLesco} disabled={lSaving} className="btn-primary px-6">
+        <button onClick={saveLesco} disabled={lSaving} className="bg-white text-black border border-slate-200 rounded-md py-1 hover:bg-black hover:text-white hover:border-black px-6">
           {lSaving ? 'Saving…' : 'Save Meter Settings'}
         </button>
         <StatusMsg ok={lOk} msg={lMsg} />
@@ -250,7 +256,7 @@ export default function Profile() {
         <button
           onClick={changePassword}
           disabled={cSaving || !pwd.old_password || !pwd.new_password}
-          className="btn-primary px-6"
+          className="bg-white text-black border border-slate-200 rounded-md py-1 hover:bg-black hover:text-white hover:border-black px-6"
         >
           {cSaving ? 'Changing…' : 'Change Password'}
         </button>
@@ -260,7 +266,7 @@ export default function Profile() {
       {/* ── Re-scan Bill ──────────────────────────────────────────────────── */}
       <div className="surface p-5 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
+          <div className="w-9 h-9 bg-blue-50 rounded-md flex items-center justify-center flex-shrink-0">
             <ScanLine size={16} className="text-blue-600" />
           </div>
           <div>

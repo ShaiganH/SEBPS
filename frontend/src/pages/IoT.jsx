@@ -12,7 +12,7 @@ const Spinner = () => (
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null
   return (
-    <div className="bg-white border border-slate-200 rounded-xl shadow-lg px-4 py-3 text-sm">
+    <div className="bg-white border border-slate-200 rounded-md shadow-lg px-4 py-3 text-sm">
       <p className="font-semibold text-slate-700 mb-1.5">{label}</p>
       {payload.map(p => (
         <div key={p.name} className="flex items-center gap-2 text-xs text-slate-600">
@@ -179,16 +179,16 @@ export default function IoT() {
         </div>
         <button
           onClick={() => setShowAdd(p => !p)}
-          className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-sm font-medium transition-colors ${
-            showAdd ? 'btn-secondary' : 'btn-primary'
+          className={`flex items-center gap-1.5 px-3.5 py-2 rounded-md text-sm font-medium transition-colors ${
+            showAdd ? 'bg-white border border-slate-200 text-black hover:bg-black hover:text-white' : 'bg-white border border-slate-200 text-black hover:bg-black hover:text-white'
           }`}
         >
-          {showAdd ? <><X size={14} /> Cancel</> : <><Plus size={14} /> Register Device</>}
+          {showAdd ? <><X size={14} /></> : <><Plus size={14} /></>}
         </button>
       </div>
 
       {msg && (
-        <div className={`flex items-center gap-2 px-4 py-3 rounded-xl text-sm ${msgOk ? 'bg-emerald-50 border border-emerald-200 text-emerald-700' : 'bg-red-50 border border-red-200 text-red-600'}`}>
+        <div className={`flex items-center gap-2 px-4 py-3 rounded-md text-sm ${msgOk ? 'bg-emerald-50 border border-emerald-200 text-emerald-700' : 'bg-red-50 border border-red-200 text-red-600'}`}>
           {msg}
         </div>
       )}
@@ -209,7 +209,7 @@ export default function IoT() {
                 placeholder="esp32-001" className="input font-mono" />
             </div>
           </div>
-          <button onClick={addDevice} className="btn-primary px-5">Register Device</button>
+          <button onClick={addDevice} className="bg-white border border-slate-200 text-black hover:bg-black hover:text-white px-5 py-2 rounded-md">Register Device</button>
         </div>
       )}
 
@@ -238,7 +238,7 @@ export default function IoT() {
               >
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-center gap-2.5">
-                    <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${d.device_id === selected ? 'bg-blue-50' : 'bg-slate-100'}`}>
+                    <div className={`w-9 h-9 rounded-md flex items-center justify-center ${d.device_id === selected ? 'bg-blue-50' : 'bg-slate-100'}`}>
                       <Cpu size={17} className={d.device_id === selected ? 'text-blue-600' : 'text-slate-500'} />
                     </div>
                     <div>
@@ -291,7 +291,7 @@ export default function IoT() {
           <p className="text-xs text-slate-400 mb-3">
             Use as <code className="bg-slate-100 px-1.5 py-0.5 rounded text-slate-700">X-Device-Token</code> header in your ESP32 firmware
           </p>
-          <div className="bg-slate-50 border border-slate-200 rounded-xl p-3.5 font-mono text-sm text-emerald-700 break-all">
+          <div className="bg-slate-50 border border-slate-200 rounded-md p-3.5 font-mono text-sm text-emerald-700 break-all">
             {token.token}
           </div>
           <p className="text-xs text-slate-400 mt-2">
@@ -326,7 +326,7 @@ export default function IoT() {
               </div>
               <button
                 onClick={() => simControl(dev.id, isRunning ? 'stop' : 'start', { wattage_w: curWatt, interval_seconds: curIntv })}
-                className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-medium transition-colors ${
+                className={`flex items-center gap-1.5 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
                   isRunning ? 'bg-red-600 hover:bg-red-700 text-white' : 'bg-emerald-600 hover:bg-emerald-700 text-white'
                 }`}
               >
@@ -341,7 +341,7 @@ export default function IoT() {
                 {INTERVALS.map(s => (
                   <button key={s}
                     onClick={() => setSimInterval(prev => ({ ...prev, [dev.id]: s }))}
-                    className={`flex-1 py-2 rounded-xl text-xs font-mono border font-medium transition-colors ${
+                    className={`flex-1 py-2 rounded-md text-xs font-mono border font-medium transition-colors ${
                       curIntv === s
                         ? 'bg-blue-600 border-blue-600 text-white'
                         : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'
@@ -363,7 +363,7 @@ export default function IoT() {
                       setSimWattage(prev => ({ ...prev, [dev.id]: p.watt }))
                       if (isRunning) simControl(dev.id, 'setload', { wattage_w: p.watt })
                     }}
-                    className={`text-xs px-3 py-1.5 rounded-xl border font-medium transition-colors ${
+                    className={`text-xs px-3 py-1.5 rounded-md border font-medium transition-colors ${
                       curWatt === p.watt
                         ? 'bg-orange-50 border-orange-300 text-orange-700'
                         : 'bg-white border-slate-200 text-slate-600 hover:border-slate-300'
@@ -387,7 +387,7 @@ export default function IoT() {
                       setSimWattage(prev => ({ ...prev, [dev.id]: p.watt }))
                       if (isRunning) simControl(dev.id, 'setload', { wattage_w: p.watt })
                     }}
-                    className={`py-2 rounded-xl text-xs border font-mono font-medium transition-colors ${
+                    className={`py-2 rounded-md text-xs border font-mono font-medium transition-colors ${
                       curWatt === p.watt
                         ? 'bg-violet-50 border-violet-300 text-violet-700'
                         : 'bg-white border-slate-200 text-slate-500 hover:border-violet-200 hover:text-violet-600'
@@ -411,14 +411,14 @@ export default function IoT() {
               </div>
               <button
                 onClick={() => simControl(dev.id, isRunning ? 'setload' : 'start', { wattage_w: curWatt, interval_seconds: curIntv })}
-                className="px-4 py-2.5 bg-orange-500 hover:bg-orange-600 rounded-xl text-sm font-medium text-white transition-colors whitespace-nowrap"
+                className="px-4 py-2.5 bg-orange-500 hover:bg-orange-600 rounded-md text-sm font-medium text-white transition-colors whitespace-nowrap"
               >
                 {isRunning ? 'Apply Load' : 'Start at this W'}
               </button>
             </div>
 
             {isRunning && (
-              <div className="mt-4 px-4 py-3 bg-orange-50 border border-orange-100 rounded-xl">
+              <div className="mt-4 px-4 py-3 bg-orange-50 border border-orange-100 rounded-md">
                 <p className="text-xs text-orange-700">
                   ⚡ {sim.wattage_w?.toLocaleString()}W · every {sim.interval_seconds}s ·{' '}
                   <span className="font-mono font-semibold">
@@ -469,7 +469,7 @@ export default function IoT() {
                   ['Freq', 'Hz',   liveReading.frequency],
                   ['PF', '',       liveReading.power_factor],
                 ].map(([l, u, v]) => (
-                  <div key={l} className="bg-slate-50 rounded-xl p-3 text-center">
+                  <div key={l} className="bg-slate-50 rounded-md p-3 text-center">
                     <p className="text-[10px] text-slate-400 font-medium">{l}</p>
                     <p className="text-lg font-bold text-slate-900 mt-0.5">
                       {typeof v === 'number' ? v.toFixed(2) : v ?? '—'}

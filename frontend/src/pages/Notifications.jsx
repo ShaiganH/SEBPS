@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { toast } from '../lib/toast'
 import api from '../api/client'
 import { BellOff, Check, CheckCheck, Trash2 } from 'lucide-react'
 
@@ -29,6 +30,7 @@ export default function Notifications() {
   const markRead = async id => {
     await api.put(`/notifications/${id}/read/`)
     setNotifications(prev => prev.map(n => n.id === id ? { ...n, is_read: true } : n))
+    toast.success('Marked as read')
   }
 
   const markAll = async () => {
@@ -36,6 +38,9 @@ export default function Notifications() {
     try {
       await api.post('/notifications/read-all/')
       setNotifications(prev => prev.map(n => ({ ...n, is_read: true })))
+      toast.success('All notifications marked as read')
+    } catch {
+      toast.error('Could not mark all as read')
     } finally { setMarkingAll(false) }
   }
 
@@ -44,6 +49,9 @@ export default function Notifications() {
     try {
       await api.delete(`/notifications/${id}/`)
       setNotifications(prev => prev.filter(n => n.id !== id))
+      toast.success('Notification deleted')
+    } catch {
+      toast.error('Could not delete notification')
     } finally { setDeleting(null) }
   }
 
