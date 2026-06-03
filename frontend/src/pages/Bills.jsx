@@ -138,11 +138,7 @@ export default function Bills() {
 
   return (
     <div className="space-y-5">
-      {/* Page header */}
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">Bills</h1>
-        <p className="text-slate-500 text-sm mt-1">Your LESCO billing history</p>
-      </div>
+ 
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <div className="surface overflow-hidden">

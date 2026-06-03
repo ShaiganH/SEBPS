@@ -6,7 +6,7 @@ import {
 } from 'recharts'
 import {
   TrendingUp, TrendingDown, Wallet, FileText, Cpu, Bell,
-  Zap, AlertTriangle, ArrowRight, ScanLine, Lightbulb,
+  Zap, AlertTriangle, ArrowRight, Lightbulb,
 } from 'lucide-react'
 
 const Spinner = () => (
@@ -34,8 +34,15 @@ const CustomTooltip = ({ active, payload, label }) => {
 }
 
 export default function Dashboard() {
-  const [data,    setData]    = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [data,       setData]       = useState(null)
+  const [loading,    setLoading]    = useState(true)
+  const [showWelcome, setShowWelcome] = useState(() => {
+    if (localStorage.getItem('welcome_message') === '1') {
+      localStorage.removeItem('welcome_message')
+      return true
+    }
+    return false
+  })
 
   useEffect(() => {
     api.get('/auth/dashboard/')
@@ -107,11 +114,29 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-5">
-      {/* Page header */}
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">Dashboard</h1>
-        <p className="text-slate-500 text-sm mt-0.5">Your electricity overview at a glance</p>
-      </div>
+      {/* Welcome banner — shown once after first onboarding */}
+      {showWelcome && (
+        <div className="relative overflow-hidden surface p-5 border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50">
+          <button
+            onClick={() => setShowWelcome(false)}
+            className="absolute top-3 right-3 w-6 h-6 rounded-lg flex items-center justify-center text-slate-400 hover:text-slate-600 hover:bg-white/60 transition-colors text-lg leading-none"
+          >
+            ×
+          </button>
+          <div className="flex items-start gap-3.5">
+            <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center flex-shrink-0">
+              <Zap size={18} className="text-white" />
+            </div>
+            <div>
+              <p className="font-bold text-slate-900">Welcome to SEBPS! 🎉</p>
+              <p className="text-sm text-slate-600 mt-0.5 leading-relaxed">
+                Your bill history has been imported and your energy profile is ready. Explore your predictions, set a budget, and let the AI advisor help you save.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <div className="surface overflow-hidden">
@@ -365,10 +390,10 @@ export default function Dashboard() {
               <FileText size={20} className="text-slate-300" />
             </div>
             <p className="text-slate-700 font-medium text-sm">No bills recorded yet</p>
-            <p className="text-slate-400 text-xs">Scan a bill image or fetch from LESCO to get started</p>
+            <p className="text-slate-400 text-xs">Fetch your bill history from LESCO to get started</p>
             <div className="flex gap-2 mt-1">
-              <Link to="/ocr" className="btn-primary text-xs px-4 py-2">Scan Image</Link>
-              <Link to="/bills" className="btn-secondary text-xs px-4 py-2">Fetch from LESCO</Link>
+              <Link to="/bills" className="btn-primary text-xs px-4 py-2">View Bills</Link>
+              <Link to="/profile" className="btn-secondary text-xs px-4 py-2">Re-scan Bill</Link>
             </div>
           </div>
         )}
@@ -379,10 +404,10 @@ export default function Dashboard() {
             <p className="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-4">Quick Actions</p>
             <div className="space-y-1.5">
               {[
-                { to: '/ocr',             label: 'Scan Bill Image',   icon: ScanLine,   color: 'text-blue-500'    },
                 { to: '/bills',           label: 'Bill History',      icon: FileText,   color: 'text-slate-400'   },
                 { to: '/predictions',     label: 'Run Prediction',    icon: TrendingUp, color: 'text-emerald-500' },
                 { to: '/recommendations', label: 'AI Advisor',        icon: Lightbulb,  color: 'text-violet-500'  },
+                { to: '/appliances',      label: 'Appliances',        icon: Zap,        color: 'text-amber-500'   },
               ].map(({ to, label, icon: Icon, color }) => (
                 <Link
                   key={to} to={to}

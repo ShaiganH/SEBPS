@@ -104,11 +104,7 @@ export default function Budget() {
 
   return (
     <div className="space-y-5">
-      {/* Page header */}
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">Budget</h1>
-        <p className="text-slate-500 text-sm mt-1">Track and control your monthly electricity spending</p>
-      </div>
+
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       {budget ? (

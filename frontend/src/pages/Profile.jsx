@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
 import api from '../api/client'
 import { useAuth } from '../context/AuthContext'
-import { User, Zap, Lock, CheckCircle2, AlertTriangle } from 'lucide-react'
+import { User, Zap, Lock, CheckCircle2, AlertTriangle, ScanLine, LogOut } from 'lucide-react'
+import OnboardingModal from '../components/OnboardingModal'
 
 const Spinner = () => (
   <div className="flex items-center justify-center h-64">
@@ -31,9 +32,10 @@ const StatusMsg = ({ ok, msg }) => msg ? (
 ) : null
 
 export default function Profile() {
-  const { refreshUser } = useAuth()
-  const [profile,  setProfile]  = useState(null)
-  const [loading,  setLoading]  = useState(true)
+  const { refreshUser, logout } = useAuth()
+  const [profile,    setProfile]    = useState(null)
+  const [loading,    setLoading]    = useState(true)
+  const [showRescan, setShowRescan] = useState(false)
 
   // Personal info
   const [personal, setPersonal] = useState({ username: '', phone_number: '' })
@@ -119,11 +121,7 @@ export default function Profile() {
 
   return (
     <div className="space-y-5">
-      {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-slate-900">Profile & Settings</h1>
-        <p className="text-slate-500 text-sm mt-1">Manage your account details and meter configuration</p>
-      </div>
+
 
       {/* Tariff info — how LESCO slab pricing works */}
       <div className="surface p-4 flex items-start gap-3 border-l-4 border-l-blue-400">
@@ -258,6 +256,39 @@ export default function Profile() {
         </button>
         <StatusMsg ok={cOk} msg={cMsg} />
       </SectionCard>
+
+      {/* ── Re-scan Bill ──────────────────────────────────────────────────── */}
+      <div className="surface p-5 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 bg-blue-50 rounded-xl flex items-center justify-center flex-shrink-0">
+            <ScanLine size={16} className="text-blue-600" />
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-slate-900">Re-scan Bill</p>
+            <p className="text-xs text-slate-400 mt-0.5">Update your LESCO data with a new bill scan</p>
+          </div>
+        </div>
+        <button
+          onClick={() => setShowRescan(true)}
+          className="btn-secondary text-xs px-4 py-2 flex-shrink-0"
+        >
+          Scan / Update
+        </button>
+      </div>
+
+      {/* ── Logout ───────────────────────────────────────────────────────── */}
+      <button
+        onClick={logout}
+        className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-red-200 text-red-500 hover:bg-red-50 transition-colors text-sm font-medium"
+      >
+        <LogOut size={15} />
+        Sign out
+      </button>
+
+      {/* Re-scan modal */}
+      {showRescan && (
+        <OnboardingModal rescan onComplete={() => setShowRescan(false)} />
+      )}
     </div>
   )
 }

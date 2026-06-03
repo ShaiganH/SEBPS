@@ -120,20 +120,7 @@ export default function Predictions() {
 
   return (
     <div className="space-y-5">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900">Predictions</h1>
-          <p className="text-slate-500 text-sm mt-1">AI-powered forecasts based on your billing history</p>
-        </div>
-        <button
-          onClick={loadAll}
-          className="w-8 h-8 flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
-          title="Refresh"
-        >
-          <RefreshCw size={15} />
-        </button>
-      </div>
+
 
       {/* ── HERO ─────────────────────────────────────────────────────────── */}
       <div className="surface overflow-hidden">
