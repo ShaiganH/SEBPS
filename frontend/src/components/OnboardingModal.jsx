@@ -370,9 +370,7 @@ export default function OnboardingModal({ onComplete, rescan = false }) {
         <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-xl">
           <p className="text-[10px] font-semibold text-emerald-600 uppercase tracking-wide mb-1">Extracted by OCR</p>
           <p className="font-mono text-lg font-bold text-slate-900 tracking-wider">{ocrJob.extracted_ref_no}</p>
-          {ocrJob.confidence && (
-            <p className="text-xs text-emerald-600 mt-1">{(ocrJob.confidence * 100).toFixed(0)}% confidence</p>
-          )}
+          
         </div>
       )}
       <div>

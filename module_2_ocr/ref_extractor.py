@@ -23,7 +23,7 @@ from collections import Counter
 from typing import Optional
 
 from preprocess import get_variants
-from ocr_engine import run_ocr
+from ocr_engine import run_ocr, run_ocr_easyocr_fallback
 
 # ── Pattern definitions ───────────────────────────────────────────────────────
 
@@ -141,7 +141,7 @@ def _search_lines(lines: list[str]) -> Optional[str]:
 
 def extract_reference_number(
     image_source,
-    early_exit_votes: int = 3,
+    early_exit_votes: int = 2,
 ) -> dict:
     """
     Extract a LESCO reference number from a bill image.
@@ -174,8 +174,9 @@ def extract_reference_number(
     all_raw_text: list[str]             = []
     variants_run: int                   = 0
 
+    # ── Phase 1: Tesseract across all preprocessing variants (~0.5 s each) ──────
     for variant_name, img in variants:
-        lines = run_ocr(img)
+        lines = run_ocr(img)       # Tesseract-only, fast
         variants_run += 1
         all_raw_text.extend(lines)
 
@@ -183,11 +184,29 @@ def extract_reference_number(
         if ref:
             hit_log.append((ref, variant_name))
 
-        # Early exit: once enough variants agree, no need to process the rest
+        # Early exit once enough variants agree
         if hit_log:
             vote = Counter(r for r, _ in hit_log)
             if vote.most_common(1)[0][1] >= early_exit_votes:
                 break
+
+    # ── Phase 2: EasyOCR fallback — only if Tesseract found nothing ─────────────
+    # Runs EasyOCR once on just the full grayscale image (~10–15 s).
+    # Handles blurry/phone-screen photos that confuse Tesseract.
+    if not hit_log:
+        print("[OCR] Tesseract found nothing — trying EasyOCR fallback on full image…")
+        import cv2, numpy as np
+        from preprocess import _to_gray, load_image
+        img_full = load_image(image_source)
+        from preprocess import _cap_size
+        img_full = _cap_size(img_full)
+        gray_full = _to_gray(img_full)
+        easy_lines = run_ocr_easyocr_fallback(gray_full)
+        variants_run += 1
+        all_raw_text.extend(easy_lines)
+        ref = _search_lines(easy_lines)
+        if ref:
+            hit_log.append((ref, 'easyocr_fallback'))
 
     if not hit_log:
         return {

@@ -6,7 +6,7 @@ from celery import shared_task
 logger = logging.getLogger(__name__)
 
 
-@shared_task(bind=True, max_retries=2, time_limit=120)
+@shared_task(bind=True, max_retries=2, time_limit=300)  # 5 min — Playwright needs time
 def run_lesco_fetch(self, job_id: int):
     """
     Fetch 12-month LESCO history via Playwright, store bills in DB.

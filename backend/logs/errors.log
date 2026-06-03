@@ -649,3 +649,143 @@ WARNING 2026-06-03 21:02:53,220 pid=31 middleware:34  GET /api/v1/predictions/la
 WARNING 2026-06-03 21:02:53,223 pid=31 django.request:241  Not Found: /api/v1/predictions/latest/
 WARNING 2026-06-03 21:02:53,249 pid=31 middleware:34  GET /api/v1/predictions/latest/ → 404 (15.2ms) user=8 size=32B
 WARNING 2026-06-03 21:02:53,254 pid=31 django.request:241  Not Found: /api/v1/predictions/latest/
+WARNING 2026-06-03 21:11:45,074 pid=31 middleware:34  GET /api/v1/budget/ → 404 (42.8ms) user=8 size=34B
+WARNING 2026-06-03 21:11:45,084 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:11:45,154 pid=31 middleware:34  GET /api/v1/budget/ → 404 (33.7ms) user=8 size=34B
+WARNING 2026-06-03 21:11:45,156 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:11:59,946 pid=31 middleware:34  GET /api/v1/budget/ → 404 (11.7ms) user=8 size=34B
+WARNING 2026-06-03 21:11:59,948 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:12:14,968 pid=31 middleware:34  GET /api/v1/budget/ → 404 (18.8ms) user=8 size=34B
+WARNING 2026-06-03 21:12:14,970 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:12:29,950 pid=31 middleware:34  GET /api/v1/budget/ → 404 (13.0ms) user=8 size=34B
+WARNING 2026-06-03 21:12:29,952 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:12:44,982 pid=31 middleware:34  GET /api/v1/budget/ → 404 (24.4ms) user=8 size=34B
+WARNING 2026-06-03 21:12:44,985 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:12:59,960 pid=31 middleware:34  GET /api/v1/budget/ → 404 (14.5ms) user=8 size=34B
+WARNING 2026-06-03 21:12:59,962 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:13:14,961 pid=31 middleware:34  GET /api/v1/budget/ → 404 (19.1ms) user=8 size=34B
+WARNING 2026-06-03 21:13:14,963 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:13:29,972 pid=31 middleware:34  GET /api/v1/budget/ → 404 (23.1ms) user=8 size=34B
+WARNING 2026-06-03 21:13:29,976 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:13:44,982 pid=31 middleware:34  GET /api/v1/budget/ → 404 (32.2ms) user=8 size=34B
+WARNING 2026-06-03 21:13:44,991 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:14:00,020 pid=31 middleware:34  GET /api/v1/budget/ → 404 (41.2ms) user=8 size=34B
+WARNING 2026-06-03 21:14:00,025 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:14:15,061 pid=31 middleware:34  GET /api/v1/budget/ → 404 (39.1ms) user=8 size=34B
+WARNING 2026-06-03 21:14:15,068 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:14:29,993 pid=31 middleware:34  GET /api/v1/budget/ → 404 (32.3ms) user=8 size=34B
+WARNING 2026-06-03 21:14:29,995 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:14:45,636 pid=31 middleware:34  GET /api/v1/budget/ → 404 (35.6ms) user=8 size=34B
+WARNING 2026-06-03 21:14:45,640 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:15:00,701 pid=31 middleware:34  GET /api/v1/budget/ → 404 (32.9ms) user=8 size=34B
+WARNING 2026-06-03 21:15:00,703 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:15:15,650 pid=31 middleware:34  GET /api/v1/budget/ → 404 (37.1ms) user=8 size=34B
+WARNING 2026-06-03 21:15:15,653 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:15:30,013 pid=31 middleware:34  GET /api/v1/budget/ → 404 (32.4ms) user=8 size=34B
+WARNING 2026-06-03 21:15:30,016 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:15:48,593 pid=31 middleware:34  GET /api/v1/budget/ → 404 (1199.4ms) user=8 size=34B
+WARNING 2026-06-03 21:15:48,800 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:15:59,964 pid=31 middleware:34  GET /api/v1/budget/ → 404 (23.0ms) user=8 size=34B
+WARNING 2026-06-03 21:15:59,965 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:16:14,964 pid=31 middleware:34  GET /api/v1/budget/ → 404 (19.6ms) user=8 size=34B
+WARNING 2026-06-03 21:16:14,967 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:16:30,028 pid=31 middleware:34  GET /api/v1/budget/ → 404 (40.6ms) user=8 size=34B
+WARNING 2026-06-03 21:16:30,034 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:16:44,985 pid=31 middleware:34  GET /api/v1/budget/ → 404 (29.7ms) user=8 size=34B
+WARNING 2026-06-03 21:16:44,988 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:16:59,979 pid=31 middleware:34  GET /api/v1/budget/ → 404 (38.5ms) user=8 size=34B
+WARNING 2026-06-03 21:16:59,982 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:17:14,953 pid=31 middleware:34  GET /api/v1/budget/ → 404 (17.6ms) user=8 size=34B
+WARNING 2026-06-03 21:17:14,954 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:17:30,049 pid=31 middleware:34  GET /api/v1/budget/ → 404 (60.4ms) user=8 size=34B
+WARNING 2026-06-03 21:17:30,052 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:17:45,024 pid=31 middleware:34  GET /api/v1/budget/ → 404 (35.1ms) user=8 size=34B
+WARNING 2026-06-03 21:17:45,028 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:17:59,983 pid=31 middleware:34  GET /api/v1/budget/ → 404 (35.8ms) user=8 size=34B
+WARNING 2026-06-03 21:17:59,985 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:18:14,957 pid=31 middleware:34  GET /api/v1/budget/ → 404 (17.2ms) user=8 size=34B
+WARNING 2026-06-03 21:18:14,961 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:18:30,037 pid=31 middleware:34  GET /api/v1/budget/ → 404 (47.6ms) user=8 size=34B
+WARNING 2026-06-03 21:18:30,043 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:18:44,984 pid=31 middleware:34  GET /api/v1/budget/ → 404 (20.1ms) user=8 size=34B
+WARNING 2026-06-03 21:18:44,986 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:18:59,973 pid=31 middleware:34  GET /api/v1/budget/ → 404 (33.6ms) user=8 size=34B
+WARNING 2026-06-03 21:18:59,975 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:19:14,956 pid=31 middleware:34  GET /api/v1/budget/ → 404 (18.2ms) user=8 size=34B
+WARNING 2026-06-03 21:19:14,957 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:19:30,022 pid=31 middleware:34  GET /api/v1/budget/ → 404 (40.7ms) user=8 size=34B
+WARNING 2026-06-03 21:19:30,027 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:19:45,019 pid=31 middleware:34  GET /api/v1/budget/ → 404 (39.3ms) user=8 size=34B
+WARNING 2026-06-03 21:19:45,024 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:19:59,984 pid=31 middleware:34  GET /api/v1/budget/ → 404 (37.4ms) user=8 size=34B
+WARNING 2026-06-03 21:19:59,986 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:20:15,763 pid=31 middleware:34  GET /api/v1/budget/ → 404 (74.9ms) user=8 size=34B
+WARNING 2026-06-03 21:20:15,776 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:20:30,590 pid=31 middleware:34  GET /api/v1/budget/ → 404 (19.6ms) user=8 size=34B
+WARNING 2026-06-03 21:20:30,594 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:20:45,048 pid=31 middleware:34  GET /api/v1/budget/ → 404 (38.2ms) user=8 size=34B
+WARNING 2026-06-03 21:20:45,053 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:21:00,566 pid=31 middleware:34  GET /api/v1/budget/ → 404 (16.0ms) user=8 size=34B
+WARNING 2026-06-03 21:21:00,568 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:21:15,589 pid=31 middleware:34  GET /api/v1/budget/ → 404 (24.9ms) user=8 size=34B
+WARNING 2026-06-03 21:21:15,593 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:21:30,579 pid=31 middleware:34  GET /api/v1/budget/ → 404 (23.1ms) user=8 size=34B
+WARNING 2026-06-03 21:21:30,583 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:21:45,585 pid=31 middleware:34  GET /api/v1/budget/ → 404 (23.0ms) user=8 size=34B
+WARNING 2026-06-03 21:21:45,587 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:22:00,566 pid=31 middleware:34  GET /api/v1/budget/ → 404 (13.8ms) user=8 size=34B
+WARNING 2026-06-03 21:22:00,567 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:22:16,662 pid=31 middleware:34  GET /api/v1/budget/ → 404 (35.2ms) user=8 size=34B
+WARNING 2026-06-03 21:22:16,664 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:23:16,770 pid=31 middleware:34  GET /api/v1/budget/ → 404 (78.8ms) user=8 size=34B
+WARNING 2026-06-03 21:23:16,776 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:24:16,843 pid=31 middleware:34  GET /api/v1/budget/ → 404 (85.1ms) user=8 size=34B
+WARNING 2026-06-03 21:24:16,861 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:25:16,800 pid=31 middleware:34  GET /api/v1/budget/ → 404 (110.5ms) user=8 size=34B
+WARNING 2026-06-03 21:25:16,809 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:26:16,744 pid=31 middleware:34  GET /api/v1/budget/ → 404 (57.3ms) user=8 size=34B
+WARNING 2026-06-03 21:26:16,751 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:27:16,757 pid=31 middleware:34  GET /api/v1/budget/ → 404 (60.1ms) user=8 size=34B
+WARNING 2026-06-03 21:27:16,764 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:28:16,793 pid=31 middleware:34  GET /api/v1/budget/ → 404 (80.3ms) user=8 size=34B
+WARNING 2026-06-03 21:28:16,798 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:29:16,792 pid=31 middleware:34  GET /api/v1/budget/ → 404 (74.1ms) user=8 size=34B
+WARNING 2026-06-03 21:29:16,805 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:30:16,712 pid=31 middleware:34  GET /api/v1/budget/ → 404 (44.0ms) user=8 size=34B
+WARNING 2026-06-03 21:30:16,716 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:31:16,695 pid=31 middleware:34  GET /api/v1/budget/ → 404 (36.6ms) user=8 size=34B
+WARNING 2026-06-03 21:31:16,698 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:32:16,757 pid=31 middleware:34  GET /api/v1/budget/ → 404 (60.2ms) user=8 size=34B
+WARNING 2026-06-03 21:32:16,762 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:33:16,742 pid=31 middleware:34  GET /api/v1/budget/ → 404 (47.0ms) user=8 size=34B
+WARNING 2026-06-03 21:33:16,744 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:34:16,747 pid=31 middleware:34  GET /api/v1/budget/ → 404 (50.8ms) user=8 size=34B
+WARNING 2026-06-03 21:34:16,754 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:35:16,732 pid=31 middleware:34  GET /api/v1/budget/ → 404 (51.5ms) user=8 size=34B
+WARNING 2026-06-03 21:35:16,739 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:46:23,204 pid=31 middleware:34  GET /api/v1/budget/ → 404 (45.0ms) user=8 size=34B
+WARNING 2026-06-03 21:46:23,209 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:46:23,239 pid=31 middleware:34  GET /api/v1/budget/ → 404 (13.2ms) user=8 size=34B
+WARNING 2026-06-03 21:46:23,251 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:46:38,047 pid=31 middleware:34  GET /api/v1/budget/ → 404 (48.1ms) user=8 size=34B
+WARNING 2026-06-03 21:46:38,052 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:46:53,062 pid=31 middleware:34  GET /api/v1/budget/ → 404 (63.4ms) user=8 size=34B
+WARNING 2026-06-03 21:46:53,100 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:47:07,996 pid=31 middleware:34  GET /api/v1/budget/ → 404 (18.2ms) user=8 size=34B
+WARNING 2026-06-03 21:47:07,999 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:47:25,320 pid=31 middleware:34  GET /api/v1/budget/ → 404 (28.8ms) user=8 size=34B
+WARNING 2026-06-03 21:47:25,332 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:47:38,001 pid=31 middleware:34  GET /api/v1/budget/ → 404 (25.2ms) user=8 size=34B
+WARNING 2026-06-03 21:47:38,003 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:48:10,233 pid=31 middleware:34  GET /api/v1/budget/ → 404 (45.0ms) user=8 size=34B
+WARNING 2026-06-03 21:48:10,237 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:48:24,207 pid=31 middleware:34  GET /api/v1/budget/ → 404 (42.6ms) user=8 size=34B
+WARNING 2026-06-03 21:48:24,216 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:48:38,876 pid=31 middleware:34  GET /api/v1/budget/ → 404 (30.6ms) user=8 size=34B
+WARNING 2026-06-03 21:48:38,878 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:49:01,916 pid=31 middleware:34  GET /api/v1/budget/ → 404 (36.6ms) user=8 size=34B
+WARNING 2026-06-03 21:49:01,920 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:49:08,899 pid=31 middleware:34  GET /api/v1/budget/ → 404 (34.1ms) user=8 size=34B
+WARNING 2026-06-03 21:49:08,901 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 21:49:23,040 pid=31 middleware:34  GET /api/v1/budget/ → 404 (30.4ms) user=8 size=34B
+WARNING 2026-06-03 21:49:23,043 pid=31 django.request:241  Not Found: /api/v1/budget/

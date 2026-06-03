@@ -38,6 +38,7 @@ statsmodels>=0.14.0
 # OCR (service layer)
 easyocr>=1.7.0
 opencv-python>=4.8.0
+pytesseract>=0.3.10
 
 # Scraping (fetcher service)
 playwright>=1.40.0

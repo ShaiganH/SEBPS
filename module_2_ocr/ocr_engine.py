@@ -68,33 +68,36 @@ def ocr_tesseract(gray: np.ndarray, psm: int = 11) -> list[str]:
 
 def run_ocr(gray: np.ndarray) -> list[str]:
     """
-    Run all available engines on one preprocessed image.
-    Returns a flat, deduplicated list of text tokens.
+    Run Tesseract on one preprocessed image variant.
+    Returns a flat, deduplicated list of text lines.
 
-    Both EasyOCR and Tesseract always run — they are independent models with
-    different failure modes.  EasyOCR struggles with backlit/pixelated phone-
-    screen text; Tesseract often recovers what EasyOCR misses, and vice versa.
-    Previously Tesseract only ran when EasyOCR returned nothing, but screen
-    photos always produce some EasyOCR output (status bar, browser chrome) even
-    when the bill reference number itself is not found.
+    Tesseract takes ~0.3–0.5 s per variant on CPU — fast enough to try all
+    10 preprocessing variants in under 5 s total.
+
+    EasyOCR is NOT called here. It is reserved as a whole-image last resort
+    in extract_reference_number() only when every Tesseract variant fails.
+    This prevents EasyOCR's 10–15 s/call cost from inflating the common case.
     """
     lines: list[str] = []
-
-    easy = ocr_easyocr(gray)
-    lines.extend(easy)
-
-    # Always run Tesseract as a cross-checker regardless of EasyOCR output.
-    # psm 11 = sparse text  (best for mixed bill layouts)
-    # psm  6 = uniform block (helps when the ref-no region is clean)
-    # psm  3 = fully automatic (OSD) — general fallback
-    for psm in (11, 6, 3):
+    for psm in (6, 11, 3):
         lines.extend(ocr_tesseract(gray, psm))
+    return _dedup(lines)
 
-    # Deduplicate while preserving order
+
+def run_ocr_easyocr_fallback(gray: np.ndarray) -> list[str]:
+    """
+    EasyOCR-only pass on a single image.  Only called by extract_reference_number()
+    as a last resort after all Tesseract variants fail.
+    Costs ~10–15 s in Docker but handles blurry / phone-screen photos.
+    """
+    return _dedup(ocr_easyocr(gray))
+
+
+def _dedup(lines: list[str]) -> list[str]:
     seen: set[str] = set()
-    unique = []
+    out = []
     for ln in lines:
         if ln not in seen:
             seen.add(ln)
-            unique.append(ln)
-    return unique
+            out.append(ln)
+    return out

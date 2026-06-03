@@ -101,7 +101,13 @@ services:
 
   celery_worker:
     build: ./backend
-    command: celery -A tasks.celery worker --loglevel=info --concurrency=4
+    # concurrency=1 + pool=solo → single process, no forking.
+    # EasyOCR loads ~500 MB of PyTorch weights. With prefork concurrency > 1
+    # each child loads its own copy — Docker's OOM killer (SIGKILL) then kills
+    # workers mid-task and triggers an infinite respawn/kill cycle.
+    # A single solo process loads EasyOCR once and handles all tasks sequentially,
+    # which is fine for a demo with low concurrent load.
+    command: celery -A tasks.celery worker --loglevel=info --pool=solo --concurrency=1
     environment:
       - DJANGO_SETTINGS_MODULE=config.settings.base
       - DEBUG=True
@@ -120,6 +126,9 @@ services:
       - ./module_4_recommender:/module_4_recommender
       - ./module_5_chatbot:/module_5_chatbot
       - media_files:/app/media
+      # Persist downloaded EasyOCR model weights (~100 MB) across container
+      # restarts so they are never re-downloaded on `docker compose up`.
+      - easyocr_cache:/root/.EasyOCR
     depends_on:
       db:
         condition: service_healthy
@@ -202,3 +211,4 @@ volumes:
   media_files:
   frontend_nm:
   mobile_nm:
+  easyocr_cache:    # persists EasyOCR model weights (~100 MB) across restarts
