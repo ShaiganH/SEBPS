@@ -23,7 +23,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 # Python dependencies — --no-cache-dir saves ~300 MB of pip http cache
 COPY requirements.txt .
+
+# Install CPU-only PyTorch BEFORE easyocr.
+# The default PyTorch wheel includes CUDA (2.5 GB); the CPU wheel is 800 MB.
+# Installing it first means pip reuses it when easyocr pulls torch as a dep.
 RUN pip install --no-cache-dir --upgrade pip \
+ && pip install --no-cache-dir \
+      torch torchvision \
+      --index-url https://download.pytorch.org/whl/cpu \
  && pip install --no-cache-dir -r requirements.txt
 
 # Playwright downloads its own Chromium + installs any missing system libs.
