@@ -103,7 +103,11 @@ services:
   celery_worker:
     build: ./backend
     image: shaigan54/sebps-backend:latest
-    command: celery -A tasks.celery worker --loglevel=info --concurrency=4
+    # --pool=solo --concurrency=1 → single process, no forking.
+    # EasyOCR loads ~500 MB of PyTorch weights. With prefork concurrency=4
+    # on a 4 GB t3.medium, each child loads its own copy → OOM → SIGKILL loop.
+    # Solo pool loads EasyOCR once and handles tasks sequentially — fine for demo load.
+    command: celery -A tasks.celery worker --loglevel=info --pool=solo --concurrency=1
     environment:
       - DJANGO_SETTINGS_MODULE=config.settings.base
       - DEBUG=True
@@ -122,6 +126,7 @@ services:
       - ./module_4_recommender:/module_4_recommender
       - ./module_5_chatbot:/module_5_chatbot
       - media_files:/app/media
+      - easyocr_cache:/root/.EasyOCR   # persists downloaded model across deploys
     depends_on:
       db:
         condition: service_healthy
@@ -164,7 +169,7 @@ services:
       # The browser never calls the backend directly, so no CORS issue.
       - VITE_BACKEND_URL=http://api:8000
     ports:
-      - "5173:5173"
+      - "80:80"
     volumes:
       - ./frontend:/app
       - frontend_nm:/app/node_modules   # isolate container node_modules from host
@@ -206,3 +211,4 @@ volumes:
   media_files:
   frontend_nm:
   mobile_nm:
+  easyocr_cache:   # persists EasyOCR model weights (~100 MB) — never re-downloads on deploy

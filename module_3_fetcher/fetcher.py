@@ -17,6 +17,7 @@ If all retries fail a FetchError is raised with a descriptive message.
 
 import re
 import time
+import os
 from playwright.sync_api import sync_playwright, TimeoutError as PWTimeout
 
 from captcha_solver import solve as solve_captcha
@@ -112,8 +113,16 @@ def fetch(
         if verbose:
             print(f"[Fetcher] {msg}")
 
+    # Optional Pakistani proxy — set LESCO_PROXY=http://host:port in backend/.env
+    # Required when running on a foreign cloud (AWS US, etc.) that LESCO blocks.
+    # Leave unset for local dev where your ISP IP is already Pakistani.
+    proxy_server = os.environ.get('LESCO_PROXY', '').strip() or None
+    launch_kwargs = {'headless': headless}
+    if proxy_server:
+        launch_kwargs['proxy'] = {'server': proxy_server}
+
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=headless)
+        browser = p.chromium.launch(**launch_kwargs)
         context = browser.new_context(
             user_agent=(
                 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
