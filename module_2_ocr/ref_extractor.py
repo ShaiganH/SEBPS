@@ -26,14 +26,22 @@ from preprocess import get_variants
 from ocr_engine import run_ocr, run_ocr_easyocr_fallback
 
 # ── Pattern definitions ───────────────────────────────────────────────────────
-
+#
 # LESCO ref: 2 digits + 5 digits + 7 digits + 1 uppercase letter = 15 alnum chars.
+# e.g.  08 11274 1172000U  /  10 11219 1154802U
+#
+# IMPORTANT: The "REFERENCE NO" table cell on the printed/web bill often shows
+# only the 14 digits (e.g. "08 11274 1169800") — the trailing letter (U, K, etc.)
+# is omitted or only appears in the barcode strip at the bottom.  All patterns
+# below make the trailing letter OPTIONAL so we still extract a valid ref.
+# _normalize() handles both 14-digit and 15-char forms.
+#
 # Patterns listed most-specific → least-specific.
-_PAT_SPACED     = re.compile(r'\b(\d{2})\s+(\d{5})\s+(\d{7}[A-Z])\b')
-_PAT_LOOSE      = re.compile(r'(\d{2})[\s\-\.]+(\d{5})[\s\-\.]+(\d{7}[A-Z])')
-_PAT_SPLIT_7_8  = re.compile(r'\b(\d{7})[\s\-\.]+(\d{7}[A-Z])\b')   # OCR merges first two groups
-_PAT_NOSPACE    = re.compile(r'\b(\d{2})(\d{5})(\d{7}[A-Z])\b')
-_PAT_COMBINED   = re.compile(r'\b(\d{14}[A-Z])\b')                   # fully merged
+_PAT_SPACED    = re.compile(r'\b(\d{2})\s+(\d{5})\s+(\d{7}[A-Z]?)\b')
+_PAT_LOOSE     = re.compile(r'(\d{2})[\s\-\.]+(\d{5})[\s\-\.]+(\d{7}[A-Z]?)')
+_PAT_SPLIT_7_8 = re.compile(r'\b(\d{7})[\s\-\.]+(\d{7}[A-Z]?)\b')  # OCR merges first two groups
+_PAT_NOSPACE   = re.compile(r'\b(\d{2})(\d{5})(\d{7}[A-Z]?)\b')
+_PAT_COMBINED  = re.compile(r'\b(\d{14}[A-Z]?)\b')                  # fully merged
 
 _ALL_PATTERNS = [_PAT_SPACED, _PAT_LOOSE, _PAT_SPLIT_7_8, _PAT_NOSPACE, _PAT_COMBINED]
 
@@ -60,14 +68,31 @@ def _fix_ocr_noise(s: str) -> str:
 
 def _normalize(raw: str) -> Optional[str]:
     """
-    Convert any matched raw string into canonical form: 'XX XXXXX XXXXXXXL'.
-    Returns None if the cleaned string doesn't have exactly 15 alphanumeric chars.
+    Convert any matched raw string into canonical form.
+
+    Accepts both:
+      • 15-char  XX XXXXX XXXXXXXL  (full ref with trailing letter)
+      • 14-digit XX XXXXX XXXXXXX   (ref as printed in the table cell — letter omitted)
+
+    The 14-digit form is returned WITHOUT a trailing letter; the fetcher passes
+    it to LESCO's lookup endpoint which works with either form in practice.
     """
     stripped = re.sub(r'[\s\-\.]', '', raw).upper()
-    stripped = _fix_ocr_noise(stripped)
-    if len(stripped) != 15 or not stripped[:14].isdigit() or not stripped[-1].isalpha():
-        return None
-    return f"{stripped[:2]} {stripped[2:7]} {stripped[7:]}"
+
+    # Apply noise fixes to digit portion only
+    if len(stripped) >= 1:
+        digit_end = 14 if len(stripped) >= 14 else len(stripped)
+        stripped = stripped[:digit_end].translate(_OCR_FIXES) + stripped[digit_end:]
+
+    # Full 15-char ref: 14 digits + 1 letter
+    if len(stripped) == 15 and stripped[:14].isdigit() and stripped[-1].isalpha():
+        return f"{stripped[:2]} {stripped[2:7]} {stripped[7:]}"
+
+    # 14-digit ref (trailing letter not captured by OCR — common in bill table)
+    if len(stripped) == 14 and stripped.isdigit():
+        return f"{stripped[:2]} {stripped[2:7]} {stripped[7:]}"
+
+    return None
 
 
 def _clean_for_matching(text: str) -> str:

@@ -41,10 +41,17 @@ def _split_ref(ref_no: str) -> tuple[str, str, str, str]:
     """
     '08 11274 1172000U'  →  ('08', '11274', '1172000', 'U')
     Accepts with or without spaces.
+
+    Also handles 14-digit refs (e.g. '08 11274 1172000') where OCR read the
+    REFERENCE NO table cell which omits the trailing letter.  LESCO's form uses
+    'U' as the RU field for the overwhelming majority of domestic consumers, so
+    we default to it when the letter is absent.
     """
     clean = re.sub(r'\s', '', ref_no).upper()
+    if len(clean) == 14 and clean.isdigit():
+        clean = clean + 'U'   # trailing letter omitted by OCR — default to 'U'
     if len(clean) != 15:
-        raise FetchError(f"Invalid reference number length: {ref_no!r}  (expected 15 alphanumeric chars)")
+        raise FetchError(f"Invalid reference number: {ref_no!r}  (expected 14 digits or 15 alphanumeric chars)")
     return clean[0:2], clean[2:7], clean[7:14], clean[14]
 
 

@@ -789,3 +789,188 @@ WARNING 2026-06-03 21:49:08,899 pid=31 middleware:34  GET /api/v1/budget/ → 40
 WARNING 2026-06-03 21:49:08,901 pid=31 django.request:241  Not Found: /api/v1/budget/
 WARNING 2026-06-03 21:49:23,040 pid=31 middleware:34  GET /api/v1/budget/ → 404 (30.4ms) user=8 size=34B
 WARNING 2026-06-03 21:49:23,043 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-03 22:04:49,223 pid=31 middleware:34  GET /api/v1/notifications/unread/ → 401 (20.3ms) user=- size=183B
+WARNING 2026-06-03 22:04:49,225 pid=31 django.request:241  Unauthorized: /api/v1/notifications/unread/
+WARNING 2026-06-04 22:28:16,751 pid=31 middleware:34  GET /api/v1/auth/me/ → 401 (31.8ms) user=- size=183B
+WARNING 2026-06-04 22:28:16,757 pid=31 django.request:241  Unauthorized: /api/v1/auth/me/
+WARNING 2026-06-04 22:28:16,775 pid=31 middleware:34  GET /api/v1/auth/me/ → 401 (1.3ms) user=- size=183B
+WARNING 2026-06-04 22:28:16,776 pid=31 django.request:241  Unauthorized: /api/v1/auth/me/
+WARNING 2026-06-04 22:29:05,411 pid=31 middleware:34  GET /api/v1/budget/ → 404 (33.2ms) user=8 size=34B
+WARNING 2026-06-04 22:29:05,418 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-04 22:29:05,459 pid=31 middleware:34  GET /api/v1/budget/ → 404 (14.5ms) user=8 size=34B
+WARNING 2026-06-04 22:29:05,464 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-04 22:29:07,506 pid=31 middleware:34  GET /api/v1/budget/ → 404 (22.3ms) user=8 size=34B
+WARNING 2026-06-04 22:29:07,517 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-04 22:29:07,555 pid=31 middleware:34  GET /api/v1/budget/ → 404 (29.2ms) user=8 size=34B
+WARNING 2026-06-04 22:29:07,557 pid=31 django.request:241  Not Found: /api/v1/budget/
+ERROR 2026-06-04 22:31:39,736 pid=1 tasks.fetch_tasks:76  Fetch job #9 failed: Invalid reference number length: '012412891'  (expected 15 alphanumeric chars)
+Traceback (most recent call last):
+  File "/app/tasks/fetch_tasks.py", line 22, in run_lesco_fetch
+    data = fetch_lesco_history(ref_no=job.ref_no, headless=True, verbose=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/services/fetcher_service.py", line 24, in fetch_lesco_history
+    result = fetch(ref_no=ref_no, headless=headless, verbose=verbose)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/module_3_fetcher/fetcher.py", line 102, in fetch
+    batch, subdiv, refno, ru = _split_ref(ref_no)
+                               ^^^^^^^^^^^^^^^^^^
+  File "/module_3_fetcher/fetcher.py", line 47, in _split_ref
+    raise FetchError(f"Invalid reference number length: {ref_no!r}  (expected 15 alphanumeric chars)")
+fetcher.FetchError: Invalid reference number length: '012412891'  (expected 15 alphanumeric chars)
+ERROR 2026-06-04 22:32:49,763 pid=1 tasks.fetch_tasks:76  Fetch job #10 failed: CAPTCHA image not found on page — ref no may be invalid.
+Traceback (most recent call last):
+  File "/module_3_fetcher/fetcher.py", line 148, in fetch
+    captcha_el.wait_for(timeout=PAGE_TIMEOUT_MS)
+  File "/usr/local/lib/python3.11/site-packages/playwright/sync_api/_generated.py", line 20048, in wait_for
+    self._sync(
+  File "/usr/local/lib/python3.11/site-packages/playwright/_impl/_sync_base.py", line 115, in _sync
+    return task.result()
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/playwright/_impl/_locator.py", line 741, in wait_for
+    await self._frame.wait_for_selector(
+  File "/usr/local/lib/python3.11/site-packages/playwright/_impl/_frame.py", line 372, in wait_for_selector
+    await self._channel.send(
+  File "/usr/local/lib/python3.11/site-packages/playwright/_impl/_connection.py", line 69, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Locator.wait_for: Timeout 20000ms exceeded.
+Call log:
+  - waiting for locator("img[src*=\"codeimage\"]").first to be visible
+    - waiting for" https://www.lesco.gov.pk:36269/Modules/CustomerBillN/CustomerMenu.asp" navigation to finish...
+    - navigated to "https://www.lesco.gov.pk:36269/Modules/CustomerBillN/CheckBill.asp?nErr=1"
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/app/tasks/fetch_tasks.py", line 22, in run_lesco_fetch
+    data = fetch_lesco_history(ref_no=job.ref_no, headless=True, verbose=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/services/fetcher_service.py", line 24, in fetch_lesco_history
+    result = fetch(ref_no=ref_no, headless=headless, verbose=verbose)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/module_3_fetcher/fetcher.py", line 151, in fetch
+    raise FetchError("CAPTCHA image not found on page — ref no may be invalid.")
+fetcher.FetchError: CAPTCHA image not found on page — ref no may be invalid.
+ERROR 2026-06-04 22:32:50,807 pid=1 tasks.fetch_tasks:76  Fetch job #9 failed: Invalid reference number length: '012412891'  (expected 15 alphanumeric chars)
+Traceback (most recent call last):
+  File "/app/tasks/fetch_tasks.py", line 22, in run_lesco_fetch
+    data = fetch_lesco_history(ref_no=job.ref_no, headless=True, verbose=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/services/fetcher_service.py", line 24, in fetch_lesco_history
+    result = fetch(ref_no=ref_no, headless=headless, verbose=verbose)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/module_3_fetcher/fetcher.py", line 102, in fetch
+    batch, subdiv, refno, ru = _split_ref(ref_no)
+                               ^^^^^^^^^^^^^^^^^^
+  File "/module_3_fetcher/fetcher.py", line 47, in _split_ref
+    raise FetchError(f"Invalid reference number length: {ref_no!r}  (expected 15 alphanumeric chars)")
+fetcher.FetchError: Invalid reference number length: '012412891'  (expected 15 alphanumeric chars)
+ERROR 2026-06-04 22:34:11,731 pid=1 tasks.fetch_tasks:76  Fetch job #10 failed: CAPTCHA image not found on page — ref no may be invalid.
+Traceback (most recent call last):
+  File "/module_3_fetcher/fetcher.py", line 148, in fetch
+    captcha_el.wait_for(timeout=PAGE_TIMEOUT_MS)
+  File "/usr/local/lib/python3.11/site-packages/playwright/sync_api/_generated.py", line 20048, in wait_for
+    self._sync(
+  File "/usr/local/lib/python3.11/site-packages/playwright/_impl/_sync_base.py", line 115, in _sync
+    return task.result()
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/playwright/_impl/_locator.py", line 741, in wait_for
+    await self._frame.wait_for_selector(
+  File "/usr/local/lib/python3.11/site-packages/playwright/_impl/_frame.py", line 372, in wait_for_selector
+    await self._channel.send(
+  File "/usr/local/lib/python3.11/site-packages/playwright/_impl/_connection.py", line 69, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Locator.wait_for: Timeout 20000ms exceeded.
+Call log:
+  - waiting for locator("img[src*=\"codeimage\"]").first to be visible
+    - waiting for" https://www.lesco.gov.pk:36269/Modules/CustomerBillN/CustomerMenu.asp" navigation to finish...
+    - navigated to "https://www.lesco.gov.pk:36269/Modules/CustomerBillN/CheckBill.asp?nErr=1"
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/app/tasks/fetch_tasks.py", line 22, in run_lesco_fetch
+    data = fetch_lesco_history(ref_no=job.ref_no, headless=True, verbose=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/services/fetcher_service.py", line 24, in fetch_lesco_history
+    result = fetch(ref_no=ref_no, headless=headless, verbose=verbose)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/module_3_fetcher/fetcher.py", line 151, in fetch
+    raise FetchError("CAPTCHA image not found on page — ref no may be invalid.")
+fetcher.FetchError: CAPTCHA image not found on page — ref no may be invalid.
+ERROR 2026-06-04 22:34:12,380 pid=1 tasks.fetch_tasks:76  Fetch job #9 failed: Invalid reference number length: '012412891'  (expected 15 alphanumeric chars)
+Traceback (most recent call last):
+  File "/app/tasks/fetch_tasks.py", line 22, in run_lesco_fetch
+    data = fetch_lesco_history(ref_no=job.ref_no, headless=True, verbose=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/services/fetcher_service.py", line 24, in fetch_lesco_history
+    result = fetch(ref_no=ref_no, headless=headless, verbose=verbose)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/module_3_fetcher/fetcher.py", line 102, in fetch
+    batch, subdiv, refno, ru = _split_ref(ref_no)
+                               ^^^^^^^^^^^^^^^^^^
+  File "/module_3_fetcher/fetcher.py", line 47, in _split_ref
+    raise FetchError(f"Invalid reference number length: {ref_no!r}  (expected 15 alphanumeric chars)")
+fetcher.FetchError: Invalid reference number length: '012412891'  (expected 15 alphanumeric chars)
+ERROR 2026-06-04 22:36:28,358 pid=1 tasks.fetch_tasks:76  Fetch job #10 failed: CAPTCHA image not found on page — ref no may be invalid.
+Traceback (most recent call last):
+  File "/module_3_fetcher/fetcher.py", line 148, in fetch
+    captcha_el.wait_for(timeout=PAGE_TIMEOUT_MS)
+  File "/usr/local/lib/python3.11/site-packages/playwright/sync_api/_generated.py", line 20048, in wait_for
+    self._sync(
+  File "/usr/local/lib/python3.11/site-packages/playwright/_impl/_sync_base.py", line 115, in _sync
+    return task.result()
+           ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/playwright/_impl/_locator.py", line 741, in wait_for
+    await self._frame.wait_for_selector(
+  File "/usr/local/lib/python3.11/site-packages/playwright/_impl/_frame.py", line 372, in wait_for_selector
+    await self._channel.send(
+  File "/usr/local/lib/python3.11/site-packages/playwright/_impl/_connection.py", line 69, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/playwright/_impl/_connection.py", line 559, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Locator.wait_for: Timeout 20000ms exceeded.
+Call log:
+  - waiting for locator("img[src*=\"codeimage\"]").first to be visible
+    - waiting for" https://www.lesco.gov.pk:36269/Modules/CustomerBillN/CustomerMenu.asp" navigation to finish...
+    - navigated to "https://www.lesco.gov.pk:36269/Modules/CustomerBillN/CheckBill.asp?nErr=1"
+
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/app/tasks/fetch_tasks.py", line 22, in run_lesco_fetch
+    data = fetch_lesco_history(ref_no=job.ref_no, headless=True, verbose=False)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/app/services/fetcher_service.py", line 24, in fetch_lesco_history
+    result = fetch(ref_no=ref_no, headless=headless, verbose=verbose)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/module_3_fetcher/fetcher.py", line 151, in fetch
+    raise FetchError("CAPTCHA image not found on page — ref no may be invalid.")
+fetcher.FetchError: CAPTCHA image not found on page — ref no may be invalid.
+WARNING 2026-06-04 22:37:56,386 pid=31 middleware:34  GET /api/v1/budget/ → 404 (17.7ms) user=9 size=34B
+WARNING 2026-06-04 22:37:56,389 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-04 22:37:56,417 pid=31 middleware:34  GET /api/v1/budget/ → 404 (15.4ms) user=9 size=34B
+WARNING 2026-06-04 22:37:56,432 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-04 22:37:57,193 pid=31 middleware:34  GET /api/v1/budget/ → 404 (26.1ms) user=9 size=34B
+WARNING 2026-06-04 22:37:57,195 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-04 22:37:57,226 pid=31 middleware:34  GET /api/v1/budget/ → 404 (14.4ms) user=9 size=34B
+WARNING 2026-06-04 22:37:57,227 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-04 22:41:24,414 pid=31 middleware:34  GET /api/v1/budget/ → 404 (18.3ms) user=9 size=34B
+WARNING 2026-06-04 22:41:24,418 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-04 22:41:24,445 pid=31 middleware:34  GET /api/v1/budget/ → 404 (12.7ms) user=9 size=34B
+WARNING 2026-06-04 22:41:24,450 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-04 22:41:25,839 pid=31 middleware:34  GET /api/v1/budget/ → 404 (25.3ms) user=9 size=34B
+WARNING 2026-06-04 22:41:25,842 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-04 22:41:25,883 pid=31 middleware:34  GET /api/v1/budget/ → 404 (29.2ms) user=9 size=34B
+WARNING 2026-06-04 22:41:25,885 pid=31 django.request:241  Not Found: /api/v1/budget/
+WARNING 2026-06-04 22:48:07,513 pid=31 middleware:34  POST /api/v1/auth/register/ → 400 (39.6ms) user=- size=227B
+WARNING 2026-06-04 22:48:07,517 pid=31 django.request:241  Bad Request: /api/v1/auth/register/

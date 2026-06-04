@@ -82,6 +82,59 @@ def _binarize_adaptive(gray: np.ndarray) -> np.ndarray:
     )
 
 
+def _dewarp_perspective(img: np.ndarray) -> np.ndarray:
+    """
+    Attempt to correct perspective distortion from angled hand-held photos.
+
+    Strategy: find the largest rectangular contour (the bill's outline) and
+    apply a four-point perspective transform to produce a straight-on view.
+    Falls back to the original image if no clear rectangle is found.
+    """
+    gray = _to_gray(img) if img.ndim == 3 else img
+    blurred = cv2.GaussianBlur(gray, (5, 5), 0)
+    edged   = cv2.Canny(blurred, 50, 150)
+    edged   = cv2.dilate(edged, np.ones((3, 3), np.uint8), iterations=1)
+
+    contours, _ = cv2.findContours(edged, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    if not contours:
+        return img
+
+    # Pick the largest contour with 4 corners (the bill rectangle)
+    contours = sorted(contours, key=cv2.contourArea, reverse=True)
+    bill_cnt = None
+    for cnt in contours[:5]:
+        peri   = cv2.arcLength(cnt, True)
+        approx = cv2.approxPolyDP(cnt, 0.02 * peri, True)
+        if len(approx) == 4:
+            bill_cnt = approx
+            break
+
+    if bill_cnt is None:
+        return img
+
+    # Order points: top-left, top-right, bottom-right, bottom-left
+    pts = bill_cnt.reshape(4, 2).astype(np.float32)
+    rect = np.zeros((4, 2), dtype=np.float32)
+    s = pts.sum(axis=1)
+    rect[0] = pts[np.argmin(s)]   # top-left
+    rect[2] = pts[np.argmax(s)]   # bottom-right
+    diff = np.diff(pts, axis=1)
+    rect[1] = pts[np.argmin(diff)] # top-right
+    rect[3] = pts[np.argmax(diff)] # bottom-left
+
+    # Compute output dimensions
+    (tl, tr, br, bl) = rect
+    w = int(max(np.linalg.norm(br - bl), np.linalg.norm(tr - tl)))
+    h = int(max(np.linalg.norm(tr - br), np.linalg.norm(tl - bl)))
+    if w < 100 or h < 100:
+        return img
+
+    dst = np.array([[0, 0], [w - 1, 0], [w - 1, h - 1], [0, h - 1]], dtype=np.float32)
+    M   = cv2.getPerspectiveTransform(rect, dst)
+    out = cv2.warpPerspective(img, M, (w, h))
+    return out
+
+
 def _deskew(gray: np.ndarray) -> np.ndarray:
     """Correct small rotation introduced when photographing a bill."""
     thresh = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)[1]
@@ -119,9 +172,17 @@ def get_variants(source) -> list[tuple[str, np.ndarray]]:
     img  = _cap_size(img, max_dim=1400)      # ← phone photos: 15 s/call → 2.9 s/call
     gray = _to_gray(img)
 
+    # ── Perspective correction — hand-held angled photo of a paper bill ─────────
+    # Detects the bill's rectangular outline and applies a 4-point warp to produce
+    # a straight-on view.  Falls back to the original if no clear rectangle found.
+    dewarped      = _dewarp_perspective(img)
+    dw_gray       = _to_gray(dewarped)
+    dw_contrast   = _clahe(dw_gray)
+    # Header of the dewarped image
+    dw_h_crop     = int(dw_gray.shape[0] * 0.40)
+    dw_header     = dw_gray[:dw_h_crop, :]
+
     # ── Header crop (top 40%) — REF NO is always in the bill header ──────────
-    # Cropping to just the header makes EasyOCR ~3× faster: 3 s → 1 s/call.
-    # We try these FIRST so early-exit triggers quickly on clear images.
     h_crop       = int(gray.shape[0] * 0.40)
     header       = gray[:h_crop, :]
     hdr_contrast = _clahe(header)
@@ -129,27 +190,38 @@ def get_variants(source) -> list[tuple[str, np.ndarray]]:
     # ── Mid-section crop (20–60%) ─────────────────────────────────────────────
     # When users photograph a bill on a phone screen, the phone's status bar and
     # browser address bar occupy the top ~15-20% of the image, pushing the bill
-    # header (which contains REF NO) into the mid-section.  The header-crop
-    # misses it because it grabs [0 → 40%] which is mostly browser chrome.
-    # A mid-section crop [20% → 60%] covers the bill header in those cases.
+    # header (which contains REF NO) into the mid-section.
     mid_top      = int(gray.shape[0] * 0.20)
     mid_bot      = int(gray.shape[0] * 0.60)
     mid          = gray[mid_top:mid_bot, :]
     mid_contrast = _clahe(mid)
 
-    # ── Full-image variants (fallback if header crop misses) ──────────────────
+    # ── Bottom strip (bottom 20%) — barcode has the FULL ref with trailing letter
+    # The "REFERENCE NO" table cell often omits the trailing letter; the barcode
+    # strip at the very bottom always has the complete 15-char ref.
+    bot_top      = int(gray.shape[0] * 0.80)
+    bottom       = gray[bot_top:, :]
+    bot_contrast = _clahe(bottom)
+
+    # ── Full-image variants (fallback if crops miss) ──────────────────────────
     contrast = _clahe(gray)
     deskewed = _deskew(contrast)
     denoised = _denoise(gray)
 
     variants: list[tuple[str, np.ndarray]] = [
-        # Header crops first — fast + most likely to contain REF NO on paper bills
+        # Perspective-corrected variants first — handles angled hand-held photos
+        ('dewarp_header',  dw_header),
+        ('dewarp_clahe',   dw_contrast),
+        # Standard header crops — fast + most likely on clean straight-on photos
         ('header_gray',    header),
         ('header_clahe',   hdr_contrast),
         ('header_otsu',    _binarize_otsu(hdr_contrast)),
         # Mid-section crops — catches REF NO when browser chrome pushes it down
         ('mid_gray',       mid),
         ('mid_clahe',      mid_contrast),
+        # Bottom strip — barcode contains the full ref including trailing letter
+        ('bottom_gray',    bottom),
+        ('bottom_clahe',   bot_contrast),
         # Full image fallback
         ('original_gray',  gray),
         ('clahe',          contrast),
