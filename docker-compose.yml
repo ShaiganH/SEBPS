@@ -102,6 +102,7 @@ services:
 
   celery_worker:
     build: ./backend
+    image: shaigan54/sebps-backend:latest
     command: celery -A tasks.celery worker --loglevel=info --concurrency=4
     environment:
       - DJANGO_SETTINGS_MODULE=config.settings.base
@@ -131,6 +132,7 @@ services:
 
   celery_beat:
     build: ./backend
+    image: shaigan54/sebps-backend:latest
     command: celery -A tasks.celery beat --loglevel=info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     environment:
       - DJANGO_SETTINGS_MODULE=config.settings.base
