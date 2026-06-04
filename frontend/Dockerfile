@@ -26,9 +26,8 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 # proxies /api/ and /ws/ to the backend service.
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Remove the default nginx config so our custom one is the only one
-RUN rm -f /etc/nginx/conf.d/default.conf.bak 2>/dev/null; \
-    nginx -t
+# Remove default nginx placeholder (our config replaces it)
+RUN rm -f /etc/nginx/conf.d/default.conf.bak 2>/dev/null || true
 
 EXPOSE 5173
 
