@@ -58,6 +58,7 @@ services:
 
   api:
     build: ./backend
+    image: shaigan54/sebps-backend:latest
     command: >-
       sh -c "python manage.py makemigrations accounts bills ocr predictions iot appliances budget recommendations chatbot notifications --no-input &&
              python manage.py migrate --no-input &&
@@ -101,13 +102,7 @@ services:
 
   celery_worker:
     build: ./backend
-    # concurrency=1 + pool=solo → single process, no forking.
-    # EasyOCR loads ~500 MB of PyTorch weights. With prefork concurrency > 1
-    # each child loads its own copy — Docker's OOM killer (SIGKILL) then kills
-    # workers mid-task and triggers an infinite respawn/kill cycle.
-    # A single solo process loads EasyOCR once and handles all tasks sequentially,
-    # which is fine for a demo with low concurrent load.
-    command: celery -A tasks.celery worker --loglevel=info --pool=solo --concurrency=1
+    command: celery -A tasks.celery worker --loglevel=info --concurrency=4
     environment:
       - DJANGO_SETTINGS_MODULE=config.settings.base
       - DEBUG=True
@@ -126,9 +121,6 @@ services:
       - ./module_4_recommender:/module_4_recommender
       - ./module_5_chatbot:/module_5_chatbot
       - media_files:/app/media
-      # Persist downloaded EasyOCR model weights (~100 MB) across container
-      # restarts so they are never re-downloaded on `docker compose up`.
-      - easyocr_cache:/root/.EasyOCR
     depends_on:
       db:
         condition: service_healthy
@@ -164,6 +156,7 @@ services:
 
   frontend:
     build: ./frontend
+    image: shaigan54/sebps-frontend:latest
     environment:
       # Vite proxy rewrites /api → http://api:8000 inside the Docker network.
       # The browser never calls the backend directly, so no CORS issue.
@@ -211,4 +204,3 @@ volumes:
   media_files:
   frontend_nm:
   mobile_nm:
-  easyocr_cache:    # persists EasyOCR model weights (~100 MB) across restarts

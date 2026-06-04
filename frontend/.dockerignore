@@ -1,0 +1,15 @@
+# Git
+.git
+.gitignore
+
+# Dependencies — rebuilt inside the container
+node_modules/
+
+# Previous build output — Stage 1 always runs npm run build fresh
+dist/
+
+# OS / editor
+.DS_Store
+*.log
+.vscode/
+.idea/

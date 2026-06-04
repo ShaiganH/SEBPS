@@ -1,0 +1,29 @@
+# Git
+.git
+.gitignore
+.github
+
+# Python bytecode
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+
+# Environment / secrets — never bake into the image
+.env
+*.env
+!.env.example
+
+# Local dev artefacts
+media/
+staticfiles/
+logs/
+*.log
+*.sqlite3
+.pytest_cache/
+htmlcov/
+.DS_Store
+
+# Editor
+.vscode/
+.idea/

@@ -37,7 +37,7 @@ statsmodels>=0.14.0
 
 # OCR (service layer)
 easyocr>=1.7.0
-opencv-python>=4.8.0
+opencv-python-headless>=4.8.0   # headless — no GUI needed, saves ~100 MB vs opencv-python
 pytesseract>=0.3.10
 
 # Scraping (fetcher service)
@@ -50,7 +50,7 @@ groq>=0.9.0
 # Monitoring / Logging
 sentry-sdk==2.14.0
 
-# Dev / Testing
-pytest-django==4.8.0
-factory-boy==3.3.1
-faker==26.0.0
+# Dev / Testing — not installed in the production image
+# pytest-django==4.8.0
+# factory-boy==3.3.1
+# faker==26.0.0
