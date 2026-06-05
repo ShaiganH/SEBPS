@@ -20,7 +20,7 @@ JAZZMIN_SETTINGS = {
     "site_logo":         None,
     "welcome_sign":      "Smart Energy Bill Prediction System",
     "copyright":         "SEBPS — Final Year Project",
-    "search_model":      ["apps.accounts.User", "apps.bills.BillRecord"],
+    "search_model":      ["accounts.User", "bills.BillRecord"],
 
     # Top menu
     "topmenu_links": [
