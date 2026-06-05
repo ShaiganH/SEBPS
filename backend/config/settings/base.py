@@ -11,10 +11,86 @@ env = environ.Env(DEBUG=(bool, False))
 environ.Env.read_env(BASE_DIR / ".env")
 
 SECRET_KEY = env("SECRET_KEY", default="django-insecure-change-me")
+
+# ── Jazzmin admin theme ───────────────────────────────────────────────────────
+JAZZMIN_SETTINGS = {
+    "site_title":        "SEBPS Admin",
+    "site_header":       "SEBPS",
+    "site_brand":        "SEBPS",
+    "site_logo":         None,
+    "welcome_sign":      "Smart Energy Bill Prediction System",
+    "copyright":         "SEBPS — Final Year Project",
+    "search_model":      ["apps.accounts.User", "apps.bills.BillRecord"],
+
+    # Top menu
+    "topmenu_links": [
+        {"name": "Dashboard",  "url": "admin:index"},
+        {"name": "API Docs",   "url": "/api/v1/docs/", "new_window": True},
+        {"name": "View Site",  "url": "/",             "new_window": True},
+    ],
+
+    # Side menu icons (Font Awesome 5)
+    "icons": {
+        "auth":                          "fas fa-users-cog",
+        "apps.accounts.user":            "fas fa-user",
+        "apps.bills.billrecord":         "fas fa-file-invoice",
+        "apps.bills.lescofetchjob":      "fas fa-cloud-download-alt",
+        "apps.ocr.ocrjob":               "fas fa-camera",
+        "apps.predictions.prediction":   "fas fa-chart-line",
+        "apps.budget.budget":            "fas fa-wallet",
+        "apps.appliances.appliance":     "fas fa-plug",
+        "apps.iot.iotdevice":            "fas fa-microchip",
+        "apps.notifications.notification":"fas fa-bell",
+        "apps.recommendations.recommendation": "fas fa-lightbulb",
+        "django_celery_beat.periodictask": "fas fa-clock",
+        "django_celery_beat.crontabschedule": "fas fa-calendar-alt",
+    },
+    "default_icon_parents": "fas fa-folder",
+    "default_icon_children": "fas fa-circle",
+
+    # UI tweaks
+    "related_modal_active":    True,
+    "show_ui_builder":         False,
+    "changeform_format":       "horizontal_tabs",
+    "language_chooser":        False,
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text":  False,
+    "footer_small_text":  False,
+    "body_small_text":    False,
+    "brand_small_text":   False,
+    "brand_colour":       "navbar-dark",
+    "accent":             "accent-warning",   # amber accent matches SEBPS theme
+    "navbar":             "navbar-dark",
+    "no_navbar_border":   True,
+    "navbar_fixed":       True,
+    "layout_boxed":       False,
+    "footer_fixed":       False,
+    "sidebar_fixed":      True,
+    "sidebar":            "sidebar-dark-warning",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": True,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme":              "darkly",
+    "dark_mode_theme":    "darkly",
+    "button_classes": {
+        "primary":   "btn-primary",
+        "secondary": "btn-secondary",
+        "info":      "btn-info",
+        "warning":   "btn-warning",
+        "danger":    "btn-danger",
+        "success":   "btn-success",
+    },
+}
 DEBUG = env("DEBUG")
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
 
 DJANGO_APPS = [
+    "jazzmin",                       # must be before django.contrib.admin
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
