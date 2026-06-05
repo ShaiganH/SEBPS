@@ -43,4 +43,14 @@ jobs:
             git pull origin main
             docker pull shaigan54/sebps-backend:latest
             docker pull shaigan54/sebps-frontend:latest
-            docker compose up -d --no-build db redis api celery_worker celery_beat frontend
+
+            # Extract the built React app from the frontend image onto the host.
+            # The nginx service mounts /opt/sebps-frontend, so this is how it
+            # gets the static files — frontend/dist is gitignored and never on disk.
+            sudo mkdir -p /opt/sebps-frontend
+            docker rm -f tmp_frontend 2>/dev/null || true
+            docker create --name tmp_frontend shaigan54/sebps-frontend:latest
+            sudo docker cp tmp_frontend:/usr/share/nginx/html/. /opt/sebps-frontend/
+            docker rm tmp_frontend
+
+            docker compose up -d --no-build db redis api celery_worker celery_beat nginx
