@@ -170,9 +170,12 @@ services:
       - VITE_BACKEND_URL=http://api:8000
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./frontend:/app
       - frontend_nm:/app/node_modules   # isolate container node_modules from host
+      - /opt/sebps-ssl:/etc/ssl/sebps:ro
+      
     depends_on:
       api:
         condition: service_healthy
@@ -212,3 +215,4 @@ volumes:
   frontend_nm:
   mobile_nm:
   easyocr_cache:   # persists EasyOCR model weights (~100 MB) — never re-downloads on deploy
+  
