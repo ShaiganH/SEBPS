@@ -26,7 +26,7 @@ from parser import parse_history_html, to_predictor_input
 
 # ── Constants ────────────────────────────────────────────────────────────────
 
-BASE_URL         = 'https://www.dub.lesco.gov.pk:36269/Modules/CustomerBillN/CheckBill.asp'
+BASE_URL         = 'https://dub.lesco.gov.pk:36269/Modules/CustomerBillN/CheckBill.asp'
 MAX_CAPTCHA_RETRIES = 6
 PAGE_TIMEOUT_MS     = 20_000
 NAV_TIMEOUT_MS      = 25_000
@@ -148,8 +148,8 @@ def fetch(
             log(f"Ref no entered: {batch} {subdiv} {refno}{ru}")
 
             # Click via JS to bypass any lingering overlay
-            page.evaluate('document.querySelector(\'input[name="btnViewMenu"]\').click()')
-            page.wait_for_load_state('domcontentloaded', timeout=NAV_TIMEOUT_MS)
+            with page.expect_navigation(wait_until='domcontentloaded', timeout=NAV_TIMEOUT_MS):
+                page.evaluate('document.querySelector(\'input[name="btnViewMenu"]\').click()')
             log("Navigated to Customer Account Menu (CAPTCHA page).")
 
             # ── Step 3: CAPTCHA loop ──────────────────────────────────────────
@@ -178,8 +178,8 @@ def fetch(
 
                 # Click "Consumption & Payment History"
                 hist_btn = page.locator('button[name="submit_param"]', has_text='Consumption')
-                hist_btn.click(timeout=PAGE_TIMEOUT_MS)
-                page.wait_for_load_state('domcontentloaded', timeout=NAV_TIMEOUT_MS)
+                with page.expect_navigation(wait_until='domcontentloaded', timeout=NAV_TIMEOUT_MS):
+                    hist_btn.click(timeout=PAGE_TIMEOUT_MS)
 
                 if _is_on_history_page(page):
                     log("✓ History page loaded.")
