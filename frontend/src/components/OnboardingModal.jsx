@@ -5,6 +5,7 @@ import {
   Zap, Upload, Hash, CheckCircle, XCircle,
   ArrowRight, ScanLine, RefreshCw, Camera, ChevronRight,
 } from 'lucide-react'
+import logo from "../../public/Logo-Hollow-BW-StrongerEdges.svg"
 
 /* ── Keyframes ──────────────────────────────────────────────────────────────── */
 const PULSE_CSS = `
@@ -212,7 +213,7 @@ export default function OnboardingModal({ onComplete, rescan = false }) {
         </p>
       </div>
 
-      <EnergyPulse />
+      <img className='w-full h-auto' src={logo} alt="Logo" />
 
       <div className="space-y-2.5">
         <button
