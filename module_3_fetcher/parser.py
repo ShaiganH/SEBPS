@@ -19,10 +19,19 @@ _MONTH_ORDER = {
 
 def _parse_month(text: str) -> tuple[int, int] | None:
     """
-    Parse 'Apr-25' → (2025, 4).  Returns None if unparseable.
-    Handles both 2-digit and 4-digit year suffixes.
+    Parse month strings in any of these formats:
+      'Apr-25'  → (2025, 4)   old LESCO portal (dash-separated)
+      'Apr 25'  → (2025, 4)   old LESCO portal (space-separated)
+      'MAY25'   → (2025, 5)   lescoebillcheck.pk (no separator)
+
+    Returns None if unparseable.
     """
-    m = re.match(r'([A-Za-z]{3})[\-\s](\d{2,4})', text.strip())
+    text = text.strip()
+    # Try with separator first ('Apr-25', 'Apr 25')
+    m = re.match(r'^([A-Za-z]{3})[\-\s](\d{2,4})$', text)
+    if not m:
+        # Try without separator ('MAY25', 'APR26')
+        m = re.match(r'^([A-Za-z]{3})(\d{2,4})$', text)
     if not m:
         return None
     mon_str = m.group(1).lower()
@@ -43,6 +52,20 @@ def _clean_int(text: str) -> int | None:
         return int(digits)
     except ValueError:
         return None
+
+
+def _clean_units(text: str) -> int | None:
+    """
+    Extract billed units from a cell that may have LESCO billing prefixes:
+      '130'     → 130   plain number
+      'EX 466'  → 466   Excess slab units
+      'SS 0'    → 0     Special slab (subsidized), zero units
+      'EX 151'  → 151
+    The prefix (EX / SS) indicates the billing slab, not extra units —
+    the number itself is always what goes into the predictor.
+    """
+    stripped = re.sub(r'^[A-Za-z]+\s*', '', text.strip())
+    return _clean_int(stripped)
 
 
 def parse_history_html(html: str) -> list[dict]:
@@ -66,8 +89,13 @@ def parse_history_html(html: str) -> list[dict]:
     for table in soup.find_all('table'):
         cells_text = [td.get_text(strip=True) for td in table.find_all('td')]
 
-        # Heuristic: this is the history table if it contains month-like strings
-        month_like = [c for c in cells_text if re.match(r'[A-Za-z]{3}[\-\s]\d{2}', c)]
+        # Heuristic: this is the history table if it contains month-like strings.
+        # Matches both 'Apr-25' (old portal) and 'MAY25' (lescoebillcheck.pk).
+        month_like = [
+            c for c in cells_text
+            if re.match(r'[A-Za-z]{3}[\-\s]\d{2}', c)   # Apr-25 / Apr 25
+            or re.match(r'^[A-Za-z]{3}\d{2,4}$', c)      # MAY25 / APR2025
+        ]
         if len(month_like) < 3:
             continue
 
@@ -83,7 +111,7 @@ def parse_history_html(html: str) -> list[dict]:
                 continue
 
             year, mon_idx = parsed
-            units   = _clean_int(tds[1].get_text())
+            units   = _clean_units(tds[1].get_text())    # handles 'EX 466', 'SS 0'
             bill    = _clean_int(tds[2].get_text())
             payment = _clean_int(tds[3].get_text()) if len(tds) > 3 else None
 

@@ -6,7 +6,7 @@ from celery import shared_task
 logger = logging.getLogger(__name__)
 
 
-@shared_task(bind=True, max_retries=2, time_limit=300)  # 5 min — Playwright needs time
+@shared_task(bind=True, max_retries=20, time_limit=300)  # 5 min — Playwright needs time
 def run_lesco_fetch(self, job_id: int):
     """
     Fetch 12-month LESCO history via Playwright, store bills in DB.
@@ -73,20 +73,33 @@ def run_lesco_fetch(self, job_id: int):
         return {"job_id": job_id, "months_fetched": job.months_fetched}
 
     except Exception as exc:
-        logger.exception(f"Fetch job #{job_id} failed: {exc}")
-        job.status = LescoFetchJob.STATUS_FAILED
-        job.error_message = str(exc)
-        job.completed_at = datetime.now(tz=timezone.utc)
-        job.save()
+        is_final_attempt = self.request.retries >= self.max_retries
 
-        _send_notification(
-            user=job.user,
-            notif_type="fetch_complete",
-            title="Billing History Fetch Failed",
-            message=f"Could not fetch LESCO history: {exc}",
-            data={"job_id": job_id, "error": str(exc)},
-        )
-        raise self.retry(exc=exc, countdown=60)
+        if is_final_attempt:
+            # All retries exhausted — permanently mark as failed and notify user
+            logger.error(f"Fetch job #{job_id} permanently failed after {self.max_retries} retries: {exc}")
+            job.status = LescoFetchJob.STATUS_FAILED
+            job.error_message = str(exc)
+            job.completed_at = datetime.now(tz=timezone.utc)
+            job.save()
+
+            _send_notification(
+                user=job.user,
+                notif_type="fetch_complete",
+                title="Billing History Fetch Failed",
+                message=f"Could not fetch LESCO history after multiple attempts. Please try again later.",
+                data={"job_id": job_id, "error": str(exc)},
+            )
+        else:
+            # Temporary failure — will be retried, keep job in RUNNING state so UI shows pending
+            retry_num = self.request.retries + 1
+            logger.warning(f"Fetch job #{job_id} failed (attempt {retry_num}/{self.max_retries}), retrying in 5 min: {exc}")
+            job.status = LescoFetchJob.STATUS_RUNNING
+            job.save(update_fields=["status"])
+
+        # Exponential backoff: 5 min → 10 min → 20 min … capped at 1 hour
+        countdown = min(300 * (2 ** self.request.retries), 3600)
+        raise self.retry(exc=exc, countdown=countdown)
 
 
 def _send_notification(user, notif_type, title, message, data=None):

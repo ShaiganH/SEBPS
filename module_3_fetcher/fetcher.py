@@ -1,35 +1,31 @@
 """
-LESCO Auto-Fetcher — Module 3.
+LESCO Bill Fetcher — Module 3 (v2).
 
-Automates the full flow on lesco.gov.pk:
-  1. Open CheckBill page, dismiss popup, fill reference number.
-  2. Read and solve the 4-char alphanumeric CAPTCHA with EasyOCR.
-  3. Submit CAPTCHA → click "Consumption & Payment History".
-  4. Parse the 12-month history table.
-  5. Return structured data ready for Module 1 (predictor).
+Uses lescoebillcheck.pk — a third-party portal with no CAPTCHA.
+Flow:
+  1. Navigate to lescoebillcheck.pk
+  2. Enter reference number (no spaces, no trailing 'U')
+  3. Submit → parse the returned bill history table
+  4. Return structured data ready for Module 1 (predictor)
 
-Retry logic
------------
-The CAPTCHA is attempted up to MAX_CAPTCHA_RETRIES times.
-On each retry the CAPTCHA image auto-refreshes (new server-side image).
-If all retries fail a FetchError is raised with a descriptive message.
+Proxy support
+-------------
+Set LESCO_PROXY=http://host:port in backend/.env if the host machine's
+IP is blocked by the site (e.g. AWS US datacenter IPs).
 """
 
 import re
-import time
 import os
 from playwright.sync_api import sync_playwright, TimeoutError as PWTimeout
 
-from captcha_solver import solve as solve_captcha
 from parser import parse_history_html, to_predictor_input
 
 
 # ── Constants ────────────────────────────────────────────────────────────────
 
-BASE_URL         = 'https://dub.lesco.gov.pk:36269/Modules/CustomerBillN/CheckBill.asp'
-MAX_CAPTCHA_RETRIES = 6
-PAGE_TIMEOUT_MS     = 20_000
-NAV_TIMEOUT_MS      = 25_000
+BASE_URL        = 'https://lescoebillcheck.pk/'
+NAV_TIMEOUT_MS  = 60_000   # 60 s — allow for slow connections through proxy
+PAGE_TIMEOUT_MS = 40_000
 
 
 class FetchError(Exception):
@@ -38,50 +34,26 @@ class FetchError(Exception):
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 
-def _split_ref(ref_no: str) -> tuple[str, str, str, str]:
+def _format_ref(ref_no: str) -> str:
     """
-    '08 11274 1172000U'  →  ('08', '11274', '1172000', 'U')
-    Accepts with or without spaces.
+    Format reference number for lescoebillcheck.pk:
+      - Remove all spaces
+      - Strip trailing 'U' (the site does not want it)
 
-    Also handles 14-digit refs (e.g. '08 11274 1172000') where OCR read the
-    REFERENCE NO table cell which omits the trailing letter.  LESCO's form uses
-    'U' as the RU field for the overwhelming majority of domestic consumers, so
-    we default to it when the letter is absent.
+    Examples
+    --------
+    '08 11274 1172000U' -> '08112741172000'
+    '10 11219 1154800'  -> '10112191154800'
     """
     clean = re.sub(r'\s', '', ref_no).upper()
-    if len(clean) == 14 and clean.isdigit():
-        clean = clean + 'U'   # trailing letter omitted by OCR — default to 'U'
-    if len(clean) != 15:
-        raise FetchError(f"Invalid reference number: {ref_no!r}  (expected 14 digits or 15 alphanumeric chars)")
-    return clean[0:2], clean[2:7], clean[7:14], clean[14]
+    if clean.endswith('U'):
+        clean = clean[:-1]
+    return clean
 
 
-def _dismiss_popup(page) -> None:
-    """Hide any overlay/popup that blocks the submit button."""
-    page.evaluate("""() => {
-        ['#popup', '.popup-container', '.modal', '.overlay', '.popup'].forEach(sel => {
-            document.querySelectorAll(sel).forEach(el => el.style.display = 'none');
-        });
-    }""")
-
-
-def _is_on_history_page(page) -> bool:
-    """Detect whether we successfully reached the history table."""
-    try:
-        content = page.content().upper()
-        return 'BILLED UNITS' in content or 'CONSUMPTION' in content and 'PAYMENT HISTORY' in content
-    except Exception:
-        return False
-
-
-def _is_captcha_wrong(page) -> bool:
-    """Detect a wrong-CAPTCHA error response."""
-    try:
-        content = page.content().upper()
-        return ('INVALID' in content or 'WRONG' in content or
-                'INCORRECT' in content or 'TRY AGAIN' in content)
-    except Exception:
-        return False
+# Exact selectors confirmed by live inspection of lescoebillcheck.pk
+REF_INPUT_SELECTOR    = 'input[name="reference_no"]'
+SUBMIT_BTN_SELECTOR   = 'input[type="submit"]'
 
 
 # ── Main fetcher ──────────────────────────────────────────────────────────────
@@ -99,27 +71,27 @@ def fetch(
     ----------
     ref_no           : LESCO reference number e.g. '08 11274 1172000U'
     headless         : Run browser in background (True) or visible (False for debugging)
-    save_screenshot  : Optional file path to save a screenshot of the history page
+    save_screenshot  : Optional file path to save a screenshot of the result page
     verbose          : Print progress to stdout
 
     Returns
     -------
-    dict from parser.to_predictor_input() — ready for Module 1 predict()
+    dict from parser.to_predictor_input() -- ready for Module 1 predict()
     Raises FetchError on unrecoverable errors.
     """
-    batch, subdiv, refno, ru = _split_ref(ref_no)
+    formatted_ref = _format_ref(ref_no)
 
     def log(msg):
         if verbose:
             print(f"[Fetcher] {msg}")
 
-    # Optional Pakistani proxy — set LESCO_PROXY=http://host:port in backend/.env
-    # Required when running on a foreign cloud (AWS US, etc.) that LESCO blocks.
-    # Leave unset for local dev where your ISP IP is already Pakistani.
+    # Optional proxy -- set LESCO_PROXY=http://host:port in backend/.env
+    # Useful if EC2's US-east IP is blocked by the site.
     proxy_server = os.environ.get('LESCO_PROXY', '').strip() or None
     launch_kwargs = {'headless': headless}
     if proxy_server:
         launch_kwargs['proxy'] = {'server': proxy_server}
+        log(f"Using proxy: {proxy_server}")
 
     with sync_playwright() as p:
         browser = p.chromium.launch(**launch_kwargs)
@@ -129,105 +101,60 @@ def fetch(
                 'AppleWebKit/537.36 (KHTML, like Gecko) '
                 'Chrome/124.0.0.0 Safari/537.36'
             ),
-            viewport={'width': 1280, 'height': 800},
+            viewport={'width': 1280, 'height': 900},
         )
         page = context.new_page()
 
         try:
-            # ── Step 1: Load CheckBill page ───────────────────────────────────
-            log(f"Navigating to LESCO CheckBill page…")
+            # ── Step 1: Load the site ─────────────────────────────────────────
+            log(f"Navigating to {BASE_URL} ...")
             page.goto(BASE_URL, timeout=NAV_TIMEOUT_MS, wait_until='domcontentloaded')
-            _dismiss_popup(page)
             log(f"Page loaded: {page.url}")
 
-            # ── Step 2: Fill reference number ─────────────────────────────────
-            page.fill('input[name="txtBatchNo"]', batch)
-            page.fill('input[name="txtSubDiv"]',  subdiv)
-            page.fill('input[name="txtRefNo"]',   refno)
-            page.select_option('select[name="cmbRU"]', ru)
-            log(f"Ref no entered: {batch} {subdiv} {refno}{ru}")
+            # ── Step 2: Fill the reference number ────────────────────────────
+            page.fill(REF_INPUT_SELECTOR, formatted_ref, timeout=PAGE_TIMEOUT_MS)
+            log(f"Entered reference: {formatted_ref}")
 
-            # Click via JS to bypass any lingering overlay
-            with page.expect_navigation(wait_until='domcontentloaded', timeout=NAV_TIMEOUT_MS):
-                page.evaluate('document.querySelector(\'input[name="btnViewMenu"]\').click()')
-            log("Navigated to Customer Account Menu (CAPTCHA page).")
+            # ── Step 3: Submit ────────────────────────────────────────────────
+            page.click(SUBMIT_BTN_SELECTOR, timeout=PAGE_TIMEOUT_MS)
+            log("Submitted form.")
 
-            # ── Step 3: CAPTCHA loop ──────────────────────────────────────────
-            captcha_attempts = 0
-            while captcha_attempts < MAX_CAPTCHA_RETRIES:
-                captcha_attempts += 1
-                log(f"CAPTCHA attempt {captcha_attempts}/{MAX_CAPTCHA_RETRIES}…")
-
-                # Screenshot just the CAPTCHA image element
-                try:
-                    captcha_el = page.locator('img[src*="codeimage"]').first
-                    captcha_el.wait_for(timeout=PAGE_TIMEOUT_MS)
-                    captcha_bytes = captcha_el.screenshot()
-                except PWTimeout:
-                    raise FetchError("CAPTCHA image not found on page — ref no may be invalid.")
-
-                # Solve
-                result = solve_captcha(captcha_bytes)
-                code   = result['code']
-                log(f"  CAPTCHA solved: {code!r}  (confidence {result['confidence']:.0%}, success={result['success']})")
-                if verbose and not result['success']:
-                    log(f"  Low-confidence variants: {result['all_results'][:4]}")
-
-                # Enter code
-                page.fill('input[name="code"]', code)
-
-                # Click "Consumption & Payment History"
-                hist_btn = page.locator('button[name="submit_param"]', has_text='Consumption')
-                with page.expect_navigation(wait_until='domcontentloaded', timeout=NAV_TIMEOUT_MS):
-                    hist_btn.click(timeout=PAGE_TIMEOUT_MS)
-
-                if _is_on_history_page(page):
-                    log("✓ History page loaded.")
-                    break
-
-                if _is_captcha_wrong(page):
-                    log(f"  ✗ Wrong CAPTCHA, retrying…")
-                    # Go back to retry with a fresh CAPTCHA
-                    page.go_back()
-                    page.wait_for_load_state('domcontentloaded', timeout=NAV_TIMEOUT_MS)
-                    continue
-
-                # Unexpected state — try going back once
-                log(f"  Unexpected page state, going back…")
-                page.go_back()
-                page.wait_for_load_state('domcontentloaded', timeout=NAV_TIMEOUT_MS)
-
-            else:
-                raise FetchError(
-                    f"CAPTCHA failed after {MAX_CAPTCHA_RETRIES} attempts. "
-                    "The CAPTCHA solver may need tuning, or the website layout has changed."
-                )
-
-            # ── Step 4: Parse history table ───────────────────────────────────
-            html = page.content()
+            # ── Step 4: Wait for result ───────────────────────────────────────
+            page.wait_for_load_state('domcontentloaded', timeout=NAV_TIMEOUT_MS)
+            log(f"Result page loaded: {page.url}")
 
             if save_screenshot:
                 page.screenshot(path=save_screenshot, full_page=True)
                 log(f"Screenshot saved: {save_screenshot}")
 
+            # ── Step 5: Parse the history table from the page HTML ────────────
+            html = page.content()
             rows = parse_history_html(html)
+
+            if not rows:
+                # Wait a few seconds in case table is rendered by JavaScript
+                log("No rows found immediately — waiting 3 s for dynamic content...")
+                page.wait_for_timeout(3000)
+                html = page.content()
+                rows = parse_history_html(html)
+
             if not rows:
                 raise FetchError(
-                    "History page loaded but no data rows found. "
-                    "The page structure may have changed — check save_screenshot output."
+                    "No history rows found in the result. "
+                    "The reference number may be invalid, or the page structure changed. "
+                    "Set save_screenshot='/tmp/debug.png' and inspect the result."
                 )
 
             log(f"Parsed {len(rows)} months of history.")
             result = to_predictor_input(rows)
 
-            # Print summary
             if verbose:
-                log("─" * 50)
+                log("-" * 50)
                 log(f"{'Month':<12} {'Units':>6}  {'Bill (Rs)':>10}")
-                log("─" * 50)
+                log("-" * 50)
                 for r in result['raw_rows']:
                     log(f"  {r['month']:<10} {r['units']:>6,}  {r['bill']:>10,}")
-                log("─" * 50)
+                log("-" * 50)
 
             return result
 
