@@ -213,7 +213,7 @@ export default function OnboardingModal({ onComplete, rescan = false }) {
         </p>
       </div>
 
-      <img className='w-full h-auto' src={logo} alt="Logo" />
+      <EnergyPulse />
 
       <div className="space-y-2.5">
         <button
@@ -541,8 +541,8 @@ export default function OnboardingModal({ onComplete, rescan = false }) {
           {/* ── Top bar ── */}
           <div className="flex items-center justify-between px-6 pt-5 pb-0">
             <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-blue-600 rounded-lg flex items-center justify-center">
-                <Zap size={12} className="text-white" />
+              <div className="w-6 h-6 bg-black rounded-lg flex items-center justify-center">
+                <img src={logo} alt="Logo" size={12} className="invert" />
               </div>
               <span className="text-xs font-bold text-slate-900">SEBPS</span>
             </div>
