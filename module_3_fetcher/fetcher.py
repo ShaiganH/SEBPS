@@ -26,7 +26,7 @@ from parser import parse_history_html, to_predictor_input
 
 # ── Constants ────────────────────────────────────────────────────────────────
 
-BASE_URL         = 'https://www.lesco.gov.pk:36269/Modules/CustomerBillN/CheckBill.asp'
+BASE_URL         = 'https://www.dub.lesco.gov.pk:36269/Modules/CustomerBillN/CheckBill.asp'
 MAX_CAPTCHA_RETRIES = 6
 PAGE_TIMEOUT_MS     = 20_000
 NAV_TIMEOUT_MS      = 25_000
