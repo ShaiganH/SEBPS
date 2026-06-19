@@ -162,23 +162,35 @@ services:
   # ── Web Frontend ─────────────────────────────────────────────────────────────
 
   frontend:
-    build: ./frontend
-    image: shaigan54/sebps-frontend:latest
+    # ./frontend's Dockerfile final stage is the production nginx+SSL image
+    # (used only by CI to build the deploy artifact, see .github/workflows).
+    # Locally we target the "builder" stage instead, which has Node, and run
+    # the Vite dev server directly so the bind-mounted source hot-reloads.
+    build:
+      context: ./frontend
+      target: builder
+    image: sebps-frontend-dev
+    command: npm run dev
     environment:
-      # Vite proxy rewrites /api → http://api:8000 inside the Docker network.
+      # Vite proxy rewrites /api, /ws → http://api:8000 inside the Docker network.
       # The browser never calls the backend directly, so no CORS issue.
-      - VITE_BACKEND_URL=/api
+      - VITE_BACKEND_URL=http://api:8000
+    ports:
+      - "5173:5173"
     volumes:
       - ./frontend:/app
       - frontend_nm:/app/node_modules   # isolate container node_modules from host
-
-      
     depends_on:
       api:
         condition: service_healthy
 
   nginx:
     image: nginx:alpine
+    # Production-only reverse proxy: bind-mounts host paths (/opt/sebps-*)
+    # that only exist on the deploy server. Skipped by plain `docker compose
+    # up`; the deploy workflow names it explicitly, which auto-activates this
+    # profile.
+    profiles: ["production"]
     ports:
       - "80:80"
       - "443:443"

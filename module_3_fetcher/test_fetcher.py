@@ -6,7 +6,6 @@ Run modes
 python3 test_fetcher.py                          → parser unit test only (no network)
 python3 test_fetcher.py live                     → full live fetch (default ref no)
 python3 test_fetcher.py live 10 11219 1154800U   → full live fetch with custom ref no
-python3 test_fetcher.py captcha path/to/img.png  → test captcha solver on an image file
 """
 
 import sys
@@ -74,27 +73,7 @@ def test_parser():
     return failed == 0
 
 
-# ── 2. CAPTCHA solver test on a saved image ────────────────────────────────
-
-def test_captcha_image(image_path: str):
-    from captcha_solver import solve
-    print(f'\n' + '='*62)
-    print(f'  CAPTCHA SOLVER TEST  —  {image_path}')
-    print('='*62)
-    with open(image_path, 'rb') as f:
-        img_bytes = f.read()
-    result = solve(img_bytes)
-    print(f"  Code       : {result['code']!r}")
-    print(f"  Confidence : {result['confidence']:.0%}")
-    print(f"  Success    : {result['success']}")
-    print(f"\n  All variant results:")
-    for name, text in result['all_results']:
-        marker = '  ← used' if text == result['code'] else ''
-        print(f"    {name:<22}  →  {text!r}{marker}")
-    print('='*62)
-
-
-# ── 3. Live end-to-end fetch ───────────────────────────────────────────────
+# ── 2. Live end-to-end fetch ───────────────────────────────────────────────
 
 def test_live_fetch(ref_no: str = '10 11219 1154800U'):
     from fetcher import fetch, FetchError
@@ -151,9 +130,6 @@ if __name__ == '__main__':
 
     if not args or args[0] == 'parser':
         test_parser()
-
-    elif args[0] == 'captcha' and len(args) >= 2:
-        test_captcha_image(args[1])
 
     elif args[0] == 'live':
         ref = ' '.join(args[1:]) if len(args) > 1 else '10 11219 1154800U'

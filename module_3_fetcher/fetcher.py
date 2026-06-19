@@ -116,26 +116,36 @@ def fetch(
             log(f"Entered reference: {formatted_ref}")
 
             # ── Step 3: Submit ────────────────────────────────────────────────
-            page.click(SUBMIT_BTN_SELECTOR, timeout=PAGE_TIMEOUT_MS)
-            log("Submitted form.")
+            # The form has target="_blank" — the result (served by PITC, the
+            # site's actual bill backend) opens in a new tab, not in `page`.
+            try:
+                with context.expect_page(timeout=PAGE_TIMEOUT_MS) as popup_info:
+                    page.click(SUBMIT_BTN_SELECTOR, timeout=PAGE_TIMEOUT_MS)
+                result_page = popup_info.value
+            except PWTimeout as e:
+                raise FetchError(
+                    f"Submitting the form did not open the result tab: {e}"
+                ) from e
+            log("Submitted form, result tab opened.")
 
             # ── Step 4: Wait for result ───────────────────────────────────────
-            page.wait_for_load_state('domcontentloaded', timeout=NAV_TIMEOUT_MS)
-            log(f"Result page loaded: {page.url}")
+            result_page.wait_for_load_state('domcontentloaded', timeout=NAV_TIMEOUT_MS)
+            log(f"Result page loaded: {result_page.url}")
 
             if save_screenshot:
-                page.screenshot(path=save_screenshot, full_page=True)
+                result_page.screenshot(path=save_screenshot, full_page=True)
                 log(f"Screenshot saved: {save_screenshot}")
 
             # ── Step 5: Parse the history table from the page HTML ────────────
-            html = page.content()
+            html = result_page.content()
             rows = parse_history_html(html)
 
             if not rows:
-                # Wait a few seconds in case table is rendered by JavaScript
+                # Wait a few seconds — the page shows a loading bar before the
+                # bill table renders.
                 log("No rows found immediately — waiting 3 s for dynamic content...")
-                page.wait_for_timeout(3000)
-                html = page.content()
+                result_page.wait_for_timeout(3000)
+                html = result_page.content()
                 rows = parse_history_html(html)
 
             if not rows:

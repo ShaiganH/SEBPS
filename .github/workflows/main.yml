@@ -53,4 +53,4 @@ jobs:
             sudo docker cp tmp_frontend:/usr/share/nginx/html/. /opt/sebps-frontend/
             docker rm tmp_frontend
 
-            docker compose up -d --no-build db redis api celery_worker celery_beat nginx
+            docker compose --profile production up -d --no-build db redis api celery_worker celery_beat nginx

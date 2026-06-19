@@ -74,8 +74,9 @@ def _normalize(raw: str) -> Optional[str]:
       • 15-char  XX XXXXX XXXXXXXL  (full ref with trailing letter)
       • 14-digit XX XXXXX XXXXXXX   (ref as printed in the table cell — letter omitted)
 
-    The 14-digit form is returned WITHOUT a trailing letter; the fetcher passes
-    it to LESCO's lookup endpoint which works with either form in practice.
+    The 14-digit form is returned WITHOUT a trailing letter; the fetcher strips
+    any trailing letter anyway before querying lescoebillcheck.pk, so either
+    form works.
     """
     stripped = re.sub(r'[\s\-\.]', '', raw).upper()
 

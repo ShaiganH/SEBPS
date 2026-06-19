@@ -27,7 +27,7 @@ class BillRecord(models.Model):
     class Meta:
         db_table = "bill_records"
         unique_together = ("user", "year", "mon_idx")
-        ordering = ["year", "mon_idx"]
+        ordering = ["-year", "-mon_idx"]
 
     def __str__(self):
         return f"{self.user.email} – {self.month_label} ({self.units} units)"
